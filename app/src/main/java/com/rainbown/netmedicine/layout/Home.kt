@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SearchBarDefaults.colors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,7 @@ import org.intellij.lang.annotations.JdkConstants
 
 fun home(modifier: Modifier) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()){
-    val (boxIcon, boxButton1, boxButton2) = createRefs()
+    val (boxIcon, botonInicio, botonRegistro) = createRefs()
         Box(modifier = Modifier.constrainAs(boxIcon){
             top.linkTo(parent.top)
             start.linkTo(parent.start)
@@ -47,10 +48,10 @@ fun home(modifier: Modifier) {
                     .height(300.dp)
             )
         }
-        Box(modifier = Modifier.constrainAs(boxButton1){
+        Box(modifier = Modifier.constrainAs(botonInicio){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom, margin = 160.dp)
+            bottom.linkTo(parent.bottom, margin = 200.dp)
         }){
             Button(
                 onClick = { },
@@ -58,24 +59,21 @@ fun home(modifier: Modifier) {
                     containerColor = primaryContainerLight
                 ),
                 modifier = Modifier
-                    .width(200.dp)
+                    .width(250.dp)
                     .height(50.dp)
             ) {
                 Text("Iniciar Sesion", color = onPrimaryContainerLight, fontSize = 12.sp, fontFamily = FontFamily.Serif)
             }
         }
-        Box(modifier = Modifier.constrainAs(boxButton2){
+        Box(modifier = Modifier.constrainAs(botonRegistro){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom, margin = 100.dp)
+            bottom.linkTo(parent.bottom, margin = 145.dp)
         }){
-            Button(
+            OutlinedButton(
                 onClick = { },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White
-                ),
                 modifier = Modifier
-                    .width(200.dp)
+                    .width(250.dp)
                     .height(50.dp)
             ) {
                 Text("Registrarse", color = onPrimaryContainerLight, fontSize = 12.sp, fontFamily = FontFamily.Serif)
