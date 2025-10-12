@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.rainbown.netmedicine.layout.home
+import com.rainbown.netmedicine.layout.Login
+import com.rainbown.netmedicine.layout.Registro
 import com.rainbown.netmedicine.ui.theme.NetMedicineTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +23,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             NetMedicineTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    home(modifier = Modifier.padding(innerPadding))
+                    //home(modifier = Modifier.padding(innerPadding))
+                    //Login(modifier = Modifier.padding(innerPadding))
+                    Registro(modifier = Modifier.padding(innerPadding))
 
                 }
             }
