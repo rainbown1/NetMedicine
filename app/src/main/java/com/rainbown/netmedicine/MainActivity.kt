@@ -11,9 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.rainbown.netmedicine.layout.home
-import com.rainbown.netmedicine.layout.Login
-import com.rainbown.netmedicine.layout.Registro
+import com.rainbown.netmedicine.View.Registro
 import com.rainbown.netmedicine.ui.theme.NetMedicineTheme
 
 class MainActivity : ComponentActivity() {
