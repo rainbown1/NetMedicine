@@ -18,32 +18,53 @@ import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.ui.theme.AppTypography
+import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerDark
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryContainerLight
+import com.rainbown.netmedicine.ui.theme.primaryLight
 import org.intellij.lang.annotations.JdkConstants
 
 @Composable
 
 fun home(modifier: Modifier) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()){
-    val (boxIcon, boxButton1, boxButton2) = createRefs()
+    val (boxIcon, boxButton1, boxButton2, bienvenida) = createRefs()
+
+        Box(modifier = Modifier.constrainAs(bienvenida) {
+            top.linkTo(parent.top, margin = 70.dp)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }) {
+            Text(
+                "BIENVENIDO",
+                color = primaryLight,
+                fontFamily = FontFamily.SansSerif,
+                letterSpacing = 1.2.sp,
+                fontSize = 50.sp,
+                fontWeight = FontWeight.W900
+            )
+        }
+
         Box(modifier = Modifier.constrainAs(boxIcon){
             top.linkTo(parent.top)
             start.linkTo(parent.start)
-            bottom.linkTo(parent.bottom, margin = 150.dp)
+            bottom.linkTo(parent.bottom, margin = 140.dp)
             end.linkTo(parent.end)
         }){
             Image(
-                painter = painterResource(R.drawable.icon),
+                painter = painterResource(R.drawable.logo),
                 contentDescription = " ",
                 modifier = Modifier
-                    .width(500.dp)
+                    .width(250.dp)
                     .height(300.dp)
             )
         }
@@ -55,30 +76,43 @@ fun home(modifier: Modifier) {
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryContainerLight
+                    containerColor = primaryLight
                 ),
                 modifier = Modifier
-                    .width(200.dp)
-                    .height(50.dp)
+                    .width(330.dp)
+                    .height(55.dp)
             ) {
-                Text("Iniciar Sesion", color = onPrimaryContainerLight, fontSize = 12.sp, fontFamily = FontFamily.Serif)
+                Text("Iniciar Sesion",
+                    color = inverseSurfaceLightMediumContrast,
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W500,
+                    style = AppTypography.labelLarge)
             }
         }
         Box(modifier = Modifier.constrainAs(boxButton2){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom, margin = 100.dp)
+            bottom.linkTo(parent.bottom, margin = 80.dp)
         }){
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White
+                    containerColor = Color.Transparent
                 ),
                 modifier = Modifier
-                    .width(200.dp)
-                    .height(50.dp)
+                    .width(330.dp)
+                    .height(55.dp)
             ) {
-                Text("Registrarse", color = onPrimaryContainerLight, fontSize = 12.sp, fontFamily = FontFamily.Serif)
+                Text("Registrarse",
+                    color = onPrimaryContainerLight,
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W500,
+                    textDecoration = TextDecoration.Underline,
+                    style = AppTypography.labelLarge)
             }
         }
     }

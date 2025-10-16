@@ -15,16 +15,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.ui.theme.AppTypography
+import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryContainerLight
+import com.rainbown.netmedicine.ui.theme.primaryLight
 
 @Composable
 fun Registro(modifier: Modifier = Modifier) {
@@ -47,8 +53,8 @@ fun Registro(modifier: Modifier = Modifier) {
                 painter = painterResource(R.drawable.user),
                 contentDescription = " ",
                 modifier = Modifier
-                    .width(200.dp)
-                    .height(180.dp)
+                    .width(180.dp)
+                    .height(150.dp)
             )
         }
 
@@ -60,127 +66,160 @@ fun Registro(modifier: Modifier = Modifier) {
             OutlinedTextField(
                 value = name.value,
                 onValueChange = { name.value = it },
-                label = { Text("Nombre") },
+                label = { Text("Nombre",
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.W400,
+                    style = AppTypography.labelLarge) },
+
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(60.dp),
+                    .width(330.dp)
+                    .height(55.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
         }
 
         Box(modifier = Modifier.constrainAs(apField) {
-            top.linkTo(parent.top, margin = 330.dp)
+            top.linkTo(nameField.bottom, margin = 25.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
                 value = ap.value,
                 onValueChange = { ap.value = it },
-                label = { Text("Apellidos") },
+                label = { Text("Apellido",
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.W400,
+                    style = AppTypography.labelLarge) },
+
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(60.dp),
+                    .width(330.dp)
+                    .height(55.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
         }
 
         Box(modifier = Modifier.constrainAs(telField) {
-            top.linkTo(parent.top, margin = 410.dp)
+            top.linkTo(apField.bottom, margin = 25.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
                 value = tel.value,
                 onValueChange = { tel.value = it },
-                label = { Text("Teléfono") },
+                label = { Text("Teléfono",
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.W400,
+                    style = AppTypography.labelLarge) },
+
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(60.dp),
+                    .width(330.dp)
+                    .height(55.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
         }
 
         Box(modifier = Modifier.constrainAs(emailField) {
-            top.linkTo(parent.top, margin = 490.dp)
+            top.linkTo(telField.bottom, margin = 25.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
                 value = email.value,
                 onValueChange = { email.value = it },
-                label = { Text("Correo electrónico") },
+                label = { Text("Correo electrónico",
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.W400,
+                    style = AppTypography.labelLarge) },
+
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(60.dp),
+                    .width(330.dp)
+                    .height(55.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
         }
 
         Box(modifier = Modifier.constrainAs(passwordField) {
-            top.linkTo(emailField.bottom, margin = 20.dp)
+            top.linkTo(emailField.bottom, margin = 25.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
-                label = { Text("Contraseña") },
+                label = { Text("Contraseña",
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.W400,
+                    style = AppTypography.labelLarge) },
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(60.dp),
+                    .width(330.dp)
+                    .height(55.dp),
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
         }
+        // botenes de abajoo
 
         Box(modifier = Modifier.constrainAs(loginButton) {
-            top.linkTo(passwordField.bottom, margin = 30.dp)
+            top.linkTo(passwordField.bottom, margin = 45.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
-            // botenes de abajoo
+
             Button(
                 onClick = {
                     println("Login: ${email.value}")
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryContainerLight
+                    containerColor = primaryLight
                 ),
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(50.dp)
+                    .width(330.dp)
+                    .height(55.dp)
             ) {
-                Text(
-                    "Registrarse",
-                    color = onPrimaryContainerLight,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                )
+                Text("Iniciar Sesion",
+                    color = inverseSurfaceLightMediumContrast,
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W500,
+                    style = AppTypography.labelLarge)
             }
         }
 
         Box(modifier = Modifier.constrainAs(registerButton) {
-            top.linkTo(loginButton.bottom, margin = 15.dp)
+            top.linkTo(loginButton.bottom, margin = 25.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             Button(
                 onClick = {},
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryContainerLight
+                    containerColor = Color.Transparent
                 ),
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(50.dp)
+                    .width(330.dp)
+                    .height(55.dp)
             ) {
                 Text(
                     "Regresar al Inicio",
                     color = onPrimaryContainerLight,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-
+                    fontFamily = FontFamily.SansSerif,
+                    letterSpacing = 1.2.sp,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.W700,
+                    textDecoration = TextDecoration.Underline,
+                    style = AppTypography.labelLarge
                     )
-
             }
         }
     }
