@@ -1,25 +1,19 @@
-package com.rainbown.netmedicine.layout
+package com.rainbown.netmedicine.View
 
-import android.R.attr.onClick
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.SearchBarDefaults.colors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,18 +21,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
-import com.rainbown.netmedicine.ui.theme.onPrimaryContainerDark
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
-import com.rainbown.netmedicine.ui.theme.primaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
-import org.intellij.lang.annotations.JdkConstants
 
 @Composable
 
 fun home(modifier: Modifier) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()){
     val (boxIcon, boxButton1, boxButton2, bienvenida) = createRefs()
-
         Box(modifier = Modifier.constrainAs(bienvenida) {
             top.linkTo(parent.top, margin = 70.dp)
             start.linkTo(parent.start)

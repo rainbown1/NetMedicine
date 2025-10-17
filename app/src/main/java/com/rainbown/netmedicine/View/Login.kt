@@ -1,12 +1,10 @@
-package com.rainbown.netmedicine.layout
+package com.rainbown.netmedicine.View
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,16 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
-import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
-import com.rainbown.netmedicine.ui.theme.primaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
-import com.rainbown.netmedicine.ui.theme.tertiaryLightMediumContrast
 
 
 @Composable
