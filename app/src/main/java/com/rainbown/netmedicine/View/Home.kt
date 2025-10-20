@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,15 +20,23 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
+import androidx.navigation.internal.NavContext
 import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
 
 @Composable
-
-fun home(modifier: Modifier) {
+fun pantallainicial(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+       home(navController)
+    }
+}
+@Composable
+fun home(navController: NavController) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()){
     val (boxIcon, boxButton1, boxButton2, bienvenida) = createRefs()
         Box(modifier = Modifier.constrainAs(bienvenida) {
@@ -64,7 +74,9 @@ fun home(modifier: Modifier) {
             bottom.linkTo(parent.bottom, margin = 160.dp)
         }){
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate(route = ScreenNav.pantallalogin.route)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight
                 ),

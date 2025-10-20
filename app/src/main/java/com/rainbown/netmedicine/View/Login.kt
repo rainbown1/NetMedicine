@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -23,14 +24,20 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.navigation.NavController
 import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.primaryLight
 
-
 @Composable
-fun Login(modifier: Modifier = Modifier) {
+fun pantallalogin(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+       Login(navController)
+    }
+}
+@Composable
+fun Login(navController: NavController) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val user = remember { mutableStateOf("") }
