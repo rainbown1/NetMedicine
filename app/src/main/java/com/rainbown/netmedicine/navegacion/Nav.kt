@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rainbown.netmedicine.View.pantallainicial
 import com.rainbown.netmedicine.View.pantallalogin
+import com.rainbown.netmedicine.View.pantallaregistro
 
 
 @Composable
@@ -20,6 +21,9 @@ fun Nav() {
         }
         composable ( route= ScreenNav.pantallalogin.route ){
             pantallalogin(navController)
+        }
+        composable ( route= ScreenNav.pantallaregistro.route ){
+            pantallaregistro(navController)
         }
     }
 }

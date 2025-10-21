@@ -99,7 +99,7 @@ fun home(navController: NavController) {
             bottom.linkTo(parent.bottom, margin = 80.dp)
         }){
             Button(
-                onClick = { },
+                onClick = {  navController.navigate(route = ScreenNav.pantallaregistro.route) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent
                 ),
