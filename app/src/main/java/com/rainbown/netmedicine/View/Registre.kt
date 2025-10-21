@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -24,14 +25,21 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.navigation.NavController
 import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
-
 @Composable
-fun Registro(modifier: Modifier = Modifier) {
+fun pantallaregistro(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+       Registro(navController)
+    }
+}
+@Composable
+fun Registro(navController: NavController) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }
@@ -200,7 +208,9 @@ fun Registro(modifier: Modifier = Modifier) {
             end.linkTo(parent.end)
         }) {
             Button(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = ScreenNav.pantallainicial.route)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent
                 ),

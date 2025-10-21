@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.primaryLight
@@ -166,7 +167,9 @@ fun Login(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             Button(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = ScreenNav.pantallaregistro.route)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight
                 ),
