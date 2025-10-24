@@ -12,6 +12,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.navegacion.ScreenNav
@@ -32,21 +36,26 @@ import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
+import com.rainbown.netmedicine.viewmodel.LoginVM
+import com.rainbown.netmedicine.viewmodel.RegistroVm
+
 @Composable
 fun pantallaregistro(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-       Registro(navController)
+        val viewModel: RegistroVm = androidx.lifecycle.viewmodel.compose.viewModel()
+        Registro(navController, viewModel)
     }
 }
 @Composable
-fun Registro(navController: NavController) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val name = remember { mutableStateOf("") }
-    val ap = remember { mutableStateOf("") }
-    val tel = remember { mutableStateOf("") }
+fun Registro(navController: NavController,viewModel: RegistroVm) {
+
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val namevm: String by viewModel.nombre.observeAsState(initial ="")
+        val lastnamevm: String by viewModel.lastName.observeAsState(initial ="")
+        val Telvm: String by viewModel.tel.observeAsState(initial ="")
+        val mailvm: String by viewModel.email.observeAsState(initial ="")
+        val passwordvm: String by viewModel.password.observeAsState(initial ="")
         val (nameField, apField, telField, emailField, passwordField, loginButton,registerButton) = createRefs()
         val (boxUser) = createRefs()
 
@@ -70,8 +79,10 @@ fun Registro(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = name.value,
-                onValueChange = { name.value = it },
+                value = namevm,
+                onValueChange = { newName ->
+                    viewModel.onregistroChanged(newName,lastnamevm,Telvm,mailvm,passwordvm)
+                },
                 label = { Text("Nombre",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -92,8 +103,10 @@ fun Registro(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = ap.value,
-                onValueChange = { ap.value = it },
+                value = lastnamevm,
+                onValueChange = { newLastname ->
+                    viewModel.onregistroChanged(namevm,newLastname,Telvm,mailvm,passwordvm)
+                },
                 label = { Text("Apellido",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -114,8 +127,10 @@ fun Registro(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = tel.value,
-                onValueChange = { tel.value = it },
+                value = Telvm,
+                onValueChange = { Newtel ->
+                    viewModel.onregistroChanged(namevm,lastnamevm,Newtel,mailvm,passwordvm)
+                },
                 label = { Text("Teléfono",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -136,8 +151,10 @@ fun Registro(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = email.value,
-                onValueChange = { email.value = it },
+                value = mailvm,
+                onValueChange = { Newmail->
+                    viewModel.onregistroChanged(namevm,lastnamevm,Telvm,Newmail,passwordvm)
+                },
                 label = { Text("Correo electrónico",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -158,8 +175,10 @@ fun Registro(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = password.value,
-                onValueChange = { password.value = it },
+                value = passwordvm,
+                onValueChange = {NewPass ->
+                    viewModel.onregistroChanged(namevm,lastnamevm,Telvm,mailvm,NewPass)
+                },
                 label = { Text("Contraseña",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -183,7 +202,7 @@ fun Registro(navController: NavController) {
 
             Button(
                 onClick = {
-                    println("Login: ${email.value}")
+                    viewModel.onregistroSelected()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight

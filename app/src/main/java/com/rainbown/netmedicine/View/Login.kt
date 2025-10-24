@@ -12,6 +12,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,26 +25,33 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.primaryLight
+import com.rainbown.netmedicine.viewmodel.LoginVM
+import androidx.compose.runtime.livedata.observeAsState
+
+
 
 @Composable
 fun pantallalogin(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-       Login(navController)
+        val viewModel: LoginVM = androidx.lifecycle.viewmodel.compose.viewModel()
+       Login(navController, viewModel)
     }
 }
 @Composable
-fun Login(navController: NavController) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val user = remember { mutableStateOf("") }
+fun Login(navController: NavController,viewModel: LoginVM) {
+
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val mailvm: String by viewModel.email.observeAsState(initial ="")
+        val usrvm: String by viewModel.usr.observeAsState(initial ="")
+        val passwordvm: String by viewModel.password.observeAsState(initial ="")
         val (emailField, passwordField, userField, loginButton, registerButton) = createRefs()
         val (boxIcon) = createRefs()
 
@@ -67,8 +75,10 @@ fun Login(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = email.value,
-                onValueChange = { email.value = it },
+                value = mailvm,
+                onValueChange = { newEmail ->
+                    viewModel.onLoginChanged(newEmail,usrvm,passwordvm)
+                },
                 label = { Text("Correo electrónico",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -90,8 +100,10 @@ fun Login(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = user.value,
-                onValueChange = { user.value = it },
+                value = usrvm,
+                onValueChange = { newUsr->
+                    viewModel.onLoginChanged(mailvm,newUsr,passwordvm)
+                },
                 label = { Text("Usuario",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -113,8 +125,10 @@ fun Login(navController: NavController) {
             end.linkTo(parent.end)
         }) {
             OutlinedTextField(
-                value = password.value,
-                onValueChange = { password.value = it },
+                value = passwordvm,
+                onValueChange = { NewPass ->
+                    viewModel.onLoginChanged(mailvm,usrvm,NewPass)
+                },
                 label = { Text("Contraseña",
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 1.2.sp,
@@ -140,7 +154,7 @@ fun Login(navController: NavController) {
         }) {
             Button(
                 onClick = {
-                    println("Login: ${email.value}")
+                    viewModel.onLoginSelected()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight
