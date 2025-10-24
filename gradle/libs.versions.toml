@@ -1,5 +1,6 @@
 [versions]
 agp = "8.13.0"
+composeBomVersion = "2025.01.00"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -8,6 +9,7 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
+runtimeLivedata = "<versión_compose>"
 uiTextGoogleFonts = "1.9.2"
 constraintVersion="1.1.1"
 constraintlayout = "2.2.1"
@@ -15,6 +17,8 @@ navigationRuntimeKtx = "2.9.5"
 navigationCompose = "2.9.5"
 
 [libraries]
+androidx-compose-bom-v20250100 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+androidx-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
