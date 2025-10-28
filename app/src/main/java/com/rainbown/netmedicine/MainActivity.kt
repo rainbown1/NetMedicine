@@ -11,7 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.rainbown.netmedicine.View.Login
 import com.rainbown.netmedicine.View.Registro
+import com.rainbown.netmedicine.View.home
+import com.rainbown.netmedicine.View.inicio
+import com.rainbown.netmedicine.navegacion.Nav
 import com.rainbown.netmedicine.ui.theme.NetMedicineTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,10 +25,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             NetMedicineTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    //home(modifier = Modifier.padding(innerPadding))
+                Nav()
+                //home(modifier = Modifier.padding(innerPadding))
                     //Login(modifier = Modifier.padding(innerPadding))
-                    Registro(modifier = Modifier.padding(innerPadding))
-
+                    //Registro(modifier = Modifier.padding(innerPadding))
+                    //inicio(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

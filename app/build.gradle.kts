@@ -49,12 +49,20 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.constraint.layout)
     implementation(libs.androidx.constraintlayout)
+<<<<<<< HEAD
     //Coil
     implementation(libs.coil.compose)
     testImplementation(libs.junit)
+=======
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.compose.runtime.livedata)
+>>>>>>> fe02a1ed489eed58a21661b768e3590afcaa06c2
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
