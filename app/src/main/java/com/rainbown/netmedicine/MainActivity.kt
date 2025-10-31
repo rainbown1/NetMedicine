@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.rainbown.netmedicine.View.Calendar
 import com.rainbown.netmedicine.View.Login
 import com.rainbown.netmedicine.View.Registro
+import com.rainbown.netmedicine.View.Servicios
 import com.rainbown.netmedicine.View.home
 import com.rainbown.netmedicine.View.inicio
 import com.rainbown.netmedicine.navegacion.Nav
@@ -34,7 +35,11 @@ class MainActivity : ComponentActivity() {
                     //Login(modifier = Modifier.padding(innerPadding))
                     //Registro(modifier = Modifier.padding(innerPadding))
                     //inicio(modifier = Modifier.padding(innerPadding))
+<<<<<<< HEAD
+                    Servicios(modifier = Modifier.padding(innerPadding))
+=======
                     Calendar(modifier = Modifier.padding(innerPadding))
+>>>>>>> ace441bbd085448e4681344b95f7ca18e226934a
                 }
             }
         }
