@@ -38,7 +38,7 @@ fun pantallainicial(navController: NavController){
 @Composable
 fun home(navController: NavController) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()){
-    val (boxIcon, boxButton1, boxButton2, bienvenida) = createRefs()
+    val (boxIcon,boxButton1,boxButton2,bienvenida) = createRefs()
         Box(modifier = Modifier.constrainAs(bienvenida) {
             top.linkTo(parent.top, margin = 70.dp)
             start.linkTo(parent.start)
