@@ -35,11 +35,10 @@ class MainActivity : ComponentActivity() {
                     //Login(modifier = Modifier.padding(innerPadding))
                     //Registro(modifier = Modifier.padding(innerPadding))
                     //inicio(modifier = Modifier.padding(innerPadding))
-<<<<<<< HEAD
+
                     Servicios(modifier = Modifier.padding(innerPadding))
-=======
+
                     Calendar(modifier = Modifier.padding(innerPadding))
->>>>>>> ace441bbd085448e4681344b95f7ca18e226934a
                 }
             }
         }
