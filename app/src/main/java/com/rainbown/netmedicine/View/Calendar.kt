@@ -29,9 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.onPrimaryLight
-import com.rainbown.netmedicine.ui.theme.onSurfaceVariantLight
 import com.rainbown.netmedicine.ui.theme.outlineLight
-import com.rainbown.netmedicine.ui.theme.primaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
 import java.util.Date
 import java.util.Locale
