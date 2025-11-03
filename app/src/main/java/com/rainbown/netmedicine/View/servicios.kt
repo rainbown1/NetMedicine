@@ -151,7 +151,7 @@ fun ServiceGridItem(servicio: Servicio) {
 }
 
 val servicios = listOf(
-    Servicio("Consultas", Icons.Outlined.MedicalServices, "Atención médica"),
+    Servicio("Consultas", Icons.Outlined.MedicalServices, "Atención Médica"),
     Servicio("Hospitales", Icons.Outlined.LocalHospital, "Ubicación"),
     Servicio("Calendario", Icons.Outlined.CalendarMonth, "Citas Agendadas"),
     Servicio("Especialidades", Icons.Outlined.MedicalInformation, "Cardiología, etc."),
@@ -159,8 +159,8 @@ val servicios = listOf(
     Servicio("Vacunación", Icons.Outlined.Vaccines, "Cartilla de Vacunación"),
     Servicio("Farmacia", Icons.Outlined.Medication, "Medicamentos"),
     Servicio("Rehabilitación", Icons.Outlined.Accessibility, "Terapias"),
-    Servicio("Planificación", Icons.Outlined.Restaurant, "Planificación familiar"),
-    Servicio("Salud Mental", Icons.Outlined.Psychology, "Apoyo emocional")
+    Servicio("Familia", Icons.Outlined.Restaurant, "Planificación Familiar"),
+    Servicio("Salud Mental", Icons.Outlined.Psychology, "Atención Psicologíca")
 )
 
 data class Servicio(
