@@ -159,8 +159,8 @@ val servicios = listOf(
     Servicio("Vacunación", Icons.Outlined.Vaccines, "Cartilla de Vacunación"),
     Servicio("Farmacia", Icons.Outlined.Medication, "Medicamentos"),
     Servicio("Rehabilitación", Icons.Outlined.Accessibility, "Terapias"),
-    Servicio("Nutrición", Icons.Outlined.Restaurant, "Asesoría"),
-    Servicio("Psicología", Icons.Outlined.Psychology, "Apoyo emocional")
+    Servicio("Planificación", Icons.Outlined.Restaurant, "Planificación familiar"),
+    Servicio("Salud Mental", Icons.Outlined.Psychology, "Apoyo emocional")
 )
 
 data class Servicio(
