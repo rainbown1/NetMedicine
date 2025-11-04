@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.volley)
     implementation(libs.hilt.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

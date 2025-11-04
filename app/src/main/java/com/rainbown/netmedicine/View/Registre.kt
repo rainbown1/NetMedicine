@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,6 +40,8 @@ import com.rainbown.netmedicine.ui.theme.primaryLight
 import com.rainbown.netmedicine.viewmodel.LoginVM
 import com.rainbown.netmedicine.viewmodel.RegistroVm
 
+
+
 @Composable
 fun pantallaregistro(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -48,6 +51,8 @@ fun pantallaregistro(navController: NavController){
 }
 @Composable
 fun Registro(navController: NavController,viewModel: RegistroVm) {
+    val context = LocalContext.current
+
 
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
@@ -81,7 +86,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             OutlinedTextField(
                 value = namevm,
                 onValueChange = { newName ->
-                    viewModel.onregistroChanged(newName,lastnamevm,Telvm,mailvm,passwordvm)
+                    viewModel.nombre.value = newName
                 },
                 label = { Text("Nombre",
                     fontFamily = FontFamily.SansSerif,
@@ -105,7 +110,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             OutlinedTextField(
                 value = lastnamevm,
                 onValueChange = { newLastname ->
-                    viewModel.onregistroChanged(namevm,newLastname,Telvm,mailvm,passwordvm)
+                    viewModel.lastName.value = newLastname
                 },
                 label = { Text("Apellido",
                     fontFamily = FontFamily.SansSerif,
@@ -129,7 +134,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             OutlinedTextField(
                 value = Telvm,
                 onValueChange = { Newtel ->
-                    viewModel.onregistroChanged(namevm,lastnamevm,Newtel,mailvm,passwordvm)
+                    viewModel.tel.value = Newtel
                 },
                 label = { Text("Teléfono",
                     fontFamily = FontFamily.SansSerif,
@@ -153,7 +158,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             OutlinedTextField(
                 value = mailvm,
                 onValueChange = { Newmail->
-                    viewModel.onregistroChanged(namevm,lastnamevm,Telvm,Newmail,passwordvm)
+                    viewModel.email.value = Newmail
                 },
                 label = { Text("Correo electrónico",
                     fontFamily = FontFamily.SansSerif,
@@ -177,7 +182,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             OutlinedTextField(
                 value = passwordvm,
                 onValueChange = {NewPass ->
-                    viewModel.onregistroChanged(namevm,lastnamevm,Telvm,mailvm,NewPass)
+                    viewModel.password.value = NewPass
                 },
                 label = { Text("Contraseña",
                     fontFamily = FontFamily.SansSerif,
@@ -202,7 +207,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
 
             Button(
                 onClick = {
-                    viewModel.onregistroSelected()
+                    viewModel.onregistroSelected(context)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight
