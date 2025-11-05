@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
@@ -57,10 +59,16 @@ import com.rainbown.netmedicine.ui.theme.onSecondaryLight
 import com.rainbown.netmedicine.ui.theme.primaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
 import com.rainbown.netmedicine.ui.theme.secondaryLight
-
+import com.rainbown.netmedicine.viewmodel.LoginVM
 
 @Composable
-fun inicio(modifier: Modifier){
+fun pantallaprincipal(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        inicio()
+    }
+}
+@Composable
+fun inicio(){
     ConstraintLayout{
         val (barra,contenedor,menu) = createRefs()
 

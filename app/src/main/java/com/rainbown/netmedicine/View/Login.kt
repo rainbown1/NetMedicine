@@ -34,7 +34,7 @@ import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.primaryLight
 import com.rainbown.netmedicine.viewmodel.LoginVM
 import androidx.compose.runtime.livedata.observeAsState
-
+import androidx.compose.ui.platform.LocalContext
 
 
 @Composable
@@ -46,6 +46,18 @@ fun pantallalogin(navController: NavController){
 }
 @Composable
 fun Login(navController: NavController,viewModel: LoginVM) {
+    val context = LocalContext.current
+    val usuario by viewModel.usuarioLiveData.observeAsState()
+    val error by viewModel.errorLiveData.observeAsState()
+
+    usuario?.let {
+        navController.navigate(ScreenNav.pantallaprincipal.route)
+    }
+
+    error?.let {
+        android.widget.Toast.makeText(context, it, android.widget.Toast.LENGTH_LONG).show()
+        viewModel.errorLiveData.value = null
+    }
 
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
@@ -76,8 +88,8 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             OutlinedTextField(
                 value = mailvm,
-                onValueChange = { newEmail ->
-                    viewModel.onLoginChanged(newEmail,usrvm,passwordvm)
+                onValueChange = { Newmail->
+                    viewModel.email.value = Newmail
                 },
                 label = { Text("Correo electrónico",
                     fontFamily = FontFamily.SansSerif,
@@ -102,7 +114,8 @@ fun Login(navController: NavController,viewModel: LoginVM) {
             OutlinedTextField(
                 value = usrvm,
                 onValueChange = { newUsr->
-                    viewModel.onLoginChanged(mailvm,newUsr,passwordvm)
+
+                    viewModel.usr.value = newUsr
                 },
                 label = { Text("Usuario",
                     fontFamily = FontFamily.SansSerif,
@@ -127,7 +140,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
             OutlinedTextField(
                 value = passwordvm,
                 onValueChange = { NewPass ->
-                    viewModel.onLoginChanged(mailvm,usrvm,NewPass)
+                    viewModel.password.value = NewPass
                 },
                 label = { Text("Contraseña",
                     fontFamily = FontFamily.SansSerif,
@@ -154,7 +167,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             Button(
                 onClick = {
-                    viewModel.onLoginSelected()
+                    viewModel.onLoginSelected(context)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight

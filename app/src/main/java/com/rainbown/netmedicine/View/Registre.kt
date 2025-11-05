@@ -37,7 +37,7 @@ import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
-import com.rainbown.netmedicine.viewmodel.LoginVM
+
 import com.rainbown.netmedicine.viewmodel.RegistroVm
 
 
