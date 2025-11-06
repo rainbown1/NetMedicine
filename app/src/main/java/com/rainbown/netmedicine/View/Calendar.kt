@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,7 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.outlineLight
+import com.rainbown.netmedicine.viewmodel.CalendarViewModel
 import java.util.Date
 import java.util.Locale
 
@@ -44,105 +49,116 @@ enum class TipoTarea {
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun CalendarWithTasks(modifier: Modifier = Modifier) {
+fun CalendarWithTasks(
+    viewModel: CalendarViewModel = viewModel(),
+    modifier: Modifier = Modifier
+) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()){
+        val (tasksB, boton) = createRefs()
+        var showCalendar by remember { mutableStateOf(false) }
 
-    var showCalendar by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
+        val selectedDateMillis by viewModel.selectedDate.collectAsState()
+        val tareasFiltradas by viewModel.tareasFiltradas.collectAsState()
+        var refreshKey by remember { mutableStateOf(0) }
 
-    val datePickerState = rememberDatePickerState()
+        val selectedDate = remember(selectedDateMillis) {
+            selectedDateMillis?.let { formatDateToCalendar(it) } ?: ""
+        }
 
-    val tareas = remember {
-        listOf(
-            Tarea(
-                id = 1,
-                titulo = "Tomar medicamento A",
-                descripcion = "1 tableta después del desayuno",
-                fecha = getCurrentDateFormatted(),
-                tipo = TipoTarea.MEDICAMENTO
-            ),
-            Tarea(
-                id = 2,
-                titulo = "Consulta con cardiólogo",
-                descripcion = "Control mensual",
-                fecha = getCurrentDateFormatted(),
-                tipo = TipoTarea.CONSULTA
-            ),
-            Tarea(
-                id = 3,
-                titulo = "Examen de sangre",
-                descripcion = "Ayuno 12 hrs",
-                fecha = getTomorrowDateFormatted(),
-                tipo = TipoTarea.EXAMEN
-            )
-        )
-    }
+        LaunchedEffect(Unit) {
+            viewModel.loadTareas()
+        }
 
-    val tareasFiltradas = if (selectedDate.isNotEmpty() && selectedDateMillis != null) {
-        val fechaFiltro = formatDateToShort(selectedDateMillis!!)
-        tareas.filter { it.fecha == fechaFiltro }
-    } else emptyList()
+        val datePickerState = rememberDatePickerState()
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = modifier.fillMaxSize()
         ) {
-            Button(
-                onClick = { showCalendar = true },
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Abrir Calendario")
+                Button(
+                    onClick = { showCalendar = true },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = onPrimaryContainerLight,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Abrir Calendario")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = selectedDate.ifEmpty { "Selecciona una fecha" },
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-            Text(
-                text = selectedDate.ifEmpty { "Selecciona una fecha" },
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center
+        Box(modifier = Modifier.constrainAs(tasksB){
+            start.linkTo(parent.start)
+            bottom.linkTo(parent.bottom, margin = 50.dp)
+            end.linkTo(parent.end)
+        }){
+            TaskBar(
+                tareas = tareasFiltradas,
+                fechaSeleccionada = selectedDate,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
             )
         }
 
-        TaskBar(
-            tareas = tareasFiltradas,
-            fechaSeleccionada = selectedDate,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.6f)
-        )
-    }
-
-    if (showCalendar) {
-        DatePickerDialog(
-            onDismissRequest = { showCalendar = false },
-            confirmButton = {
-                Button(
-                    onClick = {
-                    datePickerState.selectedDateMillis?.let {
-                        selectedDateMillis = it
-                        selectedDate = formatDateToCalendar(it)
-                    }
-                    showCalendar = false
-                }) {
-                    Text("Seleccionar")
-                }
-            },
-            dismissButton = {
-                Button(onClick = { showCalendar = false }) {
-                    Text("Cancelar")
-                }
+        Box(modifier = Modifier.constrainAs(boton){
+            end.linkTo(tasksB.end, margin = 15.dp)
+            top.linkTo(tasksB.bottom, margin = 5.dp)
+        }){
+            Button(onClick = { },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = onPrimaryContainerLight,
+                    contentColor = Color.White
+                ),
+                shape = CircleShape) {
+                Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = ""
+                )
             }
-        ) {
-            DatePicker(state = datePickerState)
-            HorizontalDivider(thickness = 2.dp, color = outlineLight, modifier = Modifier
-            .width(270.dp))
         }
 
+        if (showCalendar) {
+            DatePickerDialog(
+                onDismissRequest = { showCalendar = false },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            datePickerState.selectedDateMillis?.let { dateMillis ->
+                                viewModel.updateSelectedDate(dateMillis)
+                            }
+                            showCalendar = false
+                        }) {
+                        Text("Seleccionar")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { showCalendar = false }) {
+                        Text("Cancelar")
+                    }
+                }
+            ) {
+                DatePicker(state = datePickerState)
+                HorizontalDivider(thickness = 2.dp, color = outlineLight, modifier = Modifier
+                    .width(270.dp))
+            }
+
+        }
     }
 }
 
