@@ -5,4 +5,8 @@ sealed class ScreenNav(val route: String) {
  object pantallalogin: ScreenNav("pantalla_login")
  object pantallaregistro: ScreenNav("pantalla_registro")
  object  pantallaprincipal: ScreenNav("pantalla_principal")
+
+ object  pantallaservicios: ScreenNav("pantalla_servicios")
+
+ object pantallaagenda: ScreenNav("pantalla_agenda")
 }

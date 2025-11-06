@@ -14,8 +14,10 @@ data class Usuario(
     val apellido: String,
     val correo: String,
     val telefono: String,
-    val contraseña: String
+    val contraseña: String = ""
 )
+
+
 
 class LoginVM: ViewModel(){
 val email = MutableLiveData<String>()
@@ -42,13 +44,16 @@ val email = MutableLiveData<String>()
                             errorLiveData.postValue(json.getString("error"))
                         } else {
                             val usuario = Usuario(
-                                id = json.getInt("id"),
-                                nombre = json.getString("nombre"),
-                                apellido = json.getString("apellido"),
-                                correo = json.getString("correo"),
-                                telefono = json.getString("telefono"),
-                                contraseña = json.getString("contraseña")
+                                id = json.getInt("idUsuario"),
+                                nombre = json.getString("Nombre"),
+                                apellido = json.getString("Apellido"),
+                                correo = json.getString("Correo"),
+                                telefono = json.getString("Telefono"),
+                                contraseña = "" // no viene, lo dejamos vacío
                             )
+                            usuarioLiveData.postValue(usuario)
+
+
 
                             usuarioLiveData.postValue(usuario)
                         }

@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,12 +34,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
+import androidx.navigation.NavController
 import com.rainbown.netmedicine.ui.theme.onPrimaryLight
 import com.rainbown.netmedicine.ui.theme.onSecondaryLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
+import com.rainbown.netmedicine.viewmodel.LoginVM
 
 @Composable
-fun Servicios(modifier: Modifier = Modifier) {
+fun pantallaservicios(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Servicios()
+    }
+}
+@Composable
+fun Servicios() {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (header,content,menu) = createRefs()
 
@@ -94,14 +103,12 @@ fun Servicios(modifier: Modifier = Modifier) {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Box(modifier = Modifier.background(primaryLight).fillMaxWidth().constrainAs(menu){
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }){
-            MyNavigationBar()
+           // MyNavigationBar()
         }//Box
     }
 }

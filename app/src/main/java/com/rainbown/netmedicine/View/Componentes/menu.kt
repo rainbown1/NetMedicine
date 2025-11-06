@@ -21,9 +21,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavController
+import com.rainbown.netmedicine.navegacion.ScreenNav
 
 @Composable
-fun MyNavigationBar(){
+fun MyNavigationBar(navController: NavController){
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf("Inicio", "Hospitales", "Servicios", "Perfil")
     val selectedIcons = listOf(Icons.Filled.Home, Icons.Filled.LocalHospital, Icons.Filled.MedicalServices, Icons.Filled.Person)
@@ -40,7 +42,14 @@ fun MyNavigationBar(){
                 },
                 label = { Text(item) },
                 selected = selectedItem == index,
-                onClick = { selectedItem == index }
+                onClick = {
+                    when(item){
+                        "Agenda" -> navController.navigate(route = ScreenNav.pantallaagenda.route)
+                        //"Hospitales" -> navController.navigate("hospitalesScreen")
+                        //"Medicos" -> navController.navigate("medicoScreen")
+                        "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
+                    }
+                }
 
             )
         }
