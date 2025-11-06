@@ -39,14 +39,7 @@ import com.rainbown.netmedicine.ui.theme.primaryLight
 import java.util.Date
 import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.N)
-@Composable
-fun pantallaagendas(navController: NavController){
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-        Calendar(modifier = Modifier)
-    }
-}
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
