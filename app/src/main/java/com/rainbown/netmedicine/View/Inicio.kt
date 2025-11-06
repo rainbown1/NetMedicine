@@ -53,6 +53,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
+import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.onPrimaryLight
 import com.rainbown.netmedicine.ui.theme.onSecondaryLight
@@ -64,11 +65,11 @@ import com.rainbown.netmedicine.viewmodel.LoginVM
 @Composable
 fun pantallaprincipal(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        inicio()
+        inicio(navController)
     }
 }
 @Composable
-fun inicio(){
+fun inicio(navController: NavController){
     ConstraintLayout{
         val (barra,contenedor,menu) = createRefs()
 
@@ -117,7 +118,15 @@ fun inicio(){
 
                 labels.forEachIndexed { index, titulo ->
                     ElevatedCard (
-                        onClick = { println("Click en $titulo") },
+                        onClick = {
+
+                            when(titulo){
+                                "Agenda" -> navController.navigate(route = ScreenNav.pantallaagenda.route)
+                                //"Hospitales" -> navController.navigate("hospitalesScreen")
+                                //"Medicos" -> navController.navigate("medicoScreen")
+                                "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
+                            }
+                        },
                         elevation = CardDefaults.cardElevation(8.dp),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -152,7 +161,7 @@ fun inicio(){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }){
-            MyNavigationBar()
+            MyNavigationBar(navController)
         }//Box
 
     }
