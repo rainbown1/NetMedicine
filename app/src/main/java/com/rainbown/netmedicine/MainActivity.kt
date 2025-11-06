@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     //Registro(modifier = Modifier.padding(innerPadding))
                     //inicio(modifier = Modifier.padding(innerPadding))
 
-                    //Servicios(modifier = Modifier.padding(innerPadding))
+                    //Servicios()
 
                     //Calendar(modifier = Modifier.padding(innerPadding))
 

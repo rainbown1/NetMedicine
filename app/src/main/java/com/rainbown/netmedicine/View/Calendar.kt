@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.onPrimaryLight
 import com.rainbown.netmedicine.ui.theme.onSurfaceVariantLight
@@ -36,7 +39,14 @@ import com.rainbown.netmedicine.ui.theme.primaryLight
 import java.util.Date
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.N)
+@Composable
+fun pantallaagendas(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
+        Calendar(modifier = Modifier)
+    }
+}
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
