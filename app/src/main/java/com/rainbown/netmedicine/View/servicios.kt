@@ -168,6 +168,7 @@ fun ServiceGridItem(servicio: Servicio) {
                 maxLines = 2
             )
         }
+
     }
 }
 

@@ -106,31 +106,31 @@ fun Login(navController: NavController,viewModel: LoginVM) {
             )
         }
 
-        Box(modifier = Modifier.constrainAs(userField) {
-            top.linkTo(emailField.bottom, margin = 25.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = usrvm,
-                onValueChange = { newUsr->
-
-                    viewModel.usr.value = newUsr
-                },
-                label = { Text("Usuario",
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(60.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-            )
-        }
+//        Box(modifier = Modifier.constrainAs(userField) {
+//            top.linkTo(emailField.bottom, margin = 25.dp)
+//            start.linkTo(parent.start)
+//            end.linkTo(parent.end)
+//        }) {
+//            OutlinedTextField(
+//                value = usrvm,
+//                onValueChange = { newUsr->
+//
+//                    viewModel.usr.value = newUsr
+//                },
+//                label = { Text("Usuario",
+//                    fontFamily = FontFamily.SansSerif,
+//                    letterSpacing = 1.2.sp,
+//                    fontSize = 17.sp,
+//                    textDecoration = TextDecoration.Underline,
+//                    fontWeight = FontWeight.W400,
+//                    style = AppTypography.labelLarge) },
+//
+//                modifier = Modifier
+//                    .width(330.dp)
+//                    .height(60.dp),
+//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+//            )
+//        }
 
         Box(modifier = Modifier.constrainAs(passwordField) {
             top.linkTo(userField.bottom, margin = 25.dp)
