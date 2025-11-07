@@ -19,11 +19,11 @@ import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.N)
 class CalendarViewModel : ViewModel() {
-    private val _selectedDate = MutableStateFlow<Long?>(null)
-    val selectedDate: StateFlow<Long?> = _selectedDate.asStateFlow()
+    private var _selectedDate = MutableStateFlow<Long?>(null)
+    var selectedDate: StateFlow<Long?> = _selectedDate.asStateFlow()
 
-    private val _tareas = MutableStateFlow<List<Tarea>>(emptyList())
-    val tareas: StateFlow<List<Tarea>> = _tareas.asStateFlow()
+    private var _tareas = MutableStateFlow<List<Tarea>>(emptyList())
+    var tareas: StateFlow<List<Tarea>> = _tareas.asStateFlow()
 
     val tareasFiltradas: StateFlow<List<Tarea>> =
         selectedDate.combine(tareas) { date, tareasList ->

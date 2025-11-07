@@ -72,7 +72,7 @@ fun CalendarWithTasks(
         val tareasFiltradas by viewModel.tareasFiltradas.collectAsState()
         var refreshKey by remember { mutableStateOf(0) }
 
-        val selectedDate = remember(selectedDateMillis) {
+        var selectedDate = remember(selectedDateMillis) {
             selectedDateMillis?.let { formatDateToCalendar(it) } ?: ""
         }
 
