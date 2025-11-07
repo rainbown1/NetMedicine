@@ -24,11 +24,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.outlineLight
+import com.rainbown.netmedicine.ui.theme.primaryLight
 import com.rainbown.netmedicine.viewmodel.CalendarViewModel
 import java.util.Date
 import java.util.Locale
+
+@RequiresApi(Build.VERSION_CODES.N)
+@Composable
+fun pantallaagendas(navController: NavController){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+        CalendarWithTasks(modifier = Modifier)
+    }
+}
 
 // Modelo de datos para las tareas
 data class Tarea(
@@ -53,8 +64,8 @@ fun CalendarWithTasks(
     viewModel: CalendarViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()){
-        val (tasksB, boton) = createRefs()
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (tasksB, boton, menu) = createRefs()
         var showCalendar by remember { mutableStateOf(false) }
 
         val selectedDateMillis by viewModel.selectedDate.collectAsState()
@@ -102,11 +113,19 @@ fun CalendarWithTasks(
 
         }
 
-        Box(modifier = Modifier.constrainAs(tasksB){
+        Box(modifier = Modifier.background(primaryLight).fillMaxWidth().constrainAs(menu){
+            bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
-            bottom.linkTo(parent.bottom, margin = 50.dp)
             end.linkTo(parent.end)
         }){
+            // MyNavigationBar()
+        }//Box
+
+        Box(modifier = Modifier.constrainAs(tasksB) {
+            start.linkTo(parent.start)
+            bottom.linkTo(menu.top)
+            end.linkTo(parent.end)
+        }) {
             TaskBar(
                 tareas = tareasFiltradas,
                 fechaSeleccionada = selectedDate,
@@ -116,16 +135,19 @@ fun CalendarWithTasks(
             )
         }
 
-        Box(modifier = Modifier.constrainAs(boton){
+        Box(modifier = Modifier.constrainAs(boton) {
             end.linkTo(tasksB.end, margin = 15.dp)
             top.linkTo(tasksB.bottom, margin = 5.dp)
-        }){
-            Button(onClick = { },
+            bottom.linkTo(menu.top)
+        }) {
+            Button(
+                onClick = { },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = onPrimaryContainerLight,
                     contentColor = Color.White
                 ),
-                shape = CircleShape) {
+                shape = CircleShape
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.Add,
                     contentDescription = ""
