@@ -33,7 +33,7 @@ import org.intellij.lang.annotations.JdkConstants
 
 fun home(modifier: Modifier) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()){
-    val (boxIcon, botonInicio, botonRegistro) = createRefs()
+    val (boxIcon,botonInicio,botonRegistro) = createRefs()
         Box(modifier = Modifier.constrainAs(boxIcon){
             top.linkTo(parent.top)
             start.linkTo(parent.start)

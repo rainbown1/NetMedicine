@@ -19,6 +19,7 @@ material3 = "1.4.0"
 ui = "1.9.4"
 hilt = "2.51.1"
 volley = "1.2.1"
+lifecycleViewmodelKtx = "2.9.4"
 
 [libraries]
 
@@ -49,6 +50,7 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
