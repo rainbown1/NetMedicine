@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -12,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,14 +37,20 @@ import com.rainbown.netmedicine.ui.theme.primaryLight
 import com.rainbown.netmedicine.viewmodel.LoginVM
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
+import com.rainbown.netmedicine.data.repository.AuthRepositoryImpl
 
 
 @Composable
 fun pantallalogin(navController: NavController){
+    val context = LocalContext.current
+    val repository = AuthRepositoryImpl(context)
+    val loginUseCase = com.rainbown.netmedicine.domain.usecase.Login(repository)
+    val viewModel = remember { LoginVM(loginUseCase) }
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        val viewModel: LoginVM = androidx.lifecycle.viewmodel.compose.viewModel()
-       Login(navController, viewModel)
+        Login(navController, viewModel)
     }
+
 }
 @Composable
 fun Login(navController: NavController,viewModel: LoginVM) {
@@ -50,28 +58,33 @@ fun Login(navController: NavController,viewModel: LoginVM) {
     val usuario by viewModel.usuarioLiveData.observeAsState()
     val error by viewModel.errorLiveData.observeAsState()
 
-    usuario?.let {
-        navController.navigate(ScreenNav.pantallaprincipal.route)
+    LaunchedEffect(usuario) {
+        usuario?.let {
+            navController.navigate(ScreenNav.pantallaprincipal.route) {
+                popUpTo(ScreenNav.pantallalogin.route) { inclusive = true }
+            }
+        }
     }
 
-    error?.let {
-        android.widget.Toast.makeText(context, it, android.widget.Toast.LENGTH_LONG).show()
-        viewModel.errorLiveData.value = null
+    LaunchedEffect(error) {
+        error?.let {
+            android.widget.Toast.makeText(context, it, android.widget.Toast.LENGTH_LONG).show()
+            viewModel.errorLiveData.value = null
+        }
     }
-
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val mailvm: String by viewModel.email.observeAsState(initial ="")
-        val usrvm: String by viewModel.usr.observeAsState(initial ="")
-        val passwordvm: String by viewModel.password.observeAsState(initial ="")
-        val (emailField, passwordField, userField, loginButton, registerButton) = createRefs()
+        val mailvm: String by viewModel.email.observeAsState(initial = "")
+        val usuario by viewModel.usuarioLiveData.observeAsState()
+        val passwordvm: String by viewModel.password.observeAsState(initial = "")
+        val (emailField, passwordField, loginButton, registerButton) = createRefs()
         val (boxIcon) = createRefs()
 
-        Box(modifier = Modifier.constrainAs(boxIcon){
+        Box(modifier = Modifier.constrainAs(boxIcon) {
             top.linkTo(parent.top, margin = 50.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-        }){
+        }) {
             Image(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = " ",
@@ -88,16 +101,20 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             OutlinedTextField(
                 value = mailvm,
-                onValueChange = { Newmail->
+                onValueChange = { Newmail ->
                     viewModel.email.value = Newmail
                 },
-                label = { Text("Correo electrónico",
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
+                label = {
+                    Text(
+                        "Correo electrónico",
+                        fontFamily = FontFamily.SansSerif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge
+                    )
+                },
 
                 modifier = Modifier
                     .width(330.dp)
@@ -106,34 +123,34 @@ fun Login(navController: NavController,viewModel: LoginVM) {
             )
         }
 
-        Box(modifier = Modifier.constrainAs(userField) {
-            top.linkTo(emailField.bottom, margin = 25.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = usrvm,
-                onValueChange = { newUsr->
-
-                    viewModel.usr.value = newUsr
-                },
-                label = { Text("Usuario",
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(60.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-            )
-        }
+//        Box(modifier = Modifier.constrainAs(userField) {
+//            top.linkTo(emailField.bottom, margin = 25.dp)
+//            start.linkTo(parent.start)
+//            end.linkTo(parent.end)
+//        }) {
+//            OutlinedTextField(
+//                value = usrvm,
+//                onValueChange = { newUsr->
+//
+//                    viewModel.usr.value = newUsr
+//                },
+//                label = { Text("Usuario",
+//                    fontFamily = FontFamily.SansSerif,
+//                    letterSpacing = 1.2.sp,
+//                    fontSize = 17.sp,
+//                    textDecoration = TextDecoration.Underline,
+//                    fontWeight = FontWeight.W400,
+//                    style = AppTypography.labelLarge) },
+//
+//                modifier = Modifier
+//                    .width(330.dp)
+//                    .height(60.dp),
+//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+//            )
+//        }
 
         Box(modifier = Modifier.constrainAs(passwordField) {
-            top.linkTo(userField.bottom, margin = 25.dp)
+            top.linkTo(emailField.bottom, margin = 25.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
@@ -142,13 +159,17 @@ fun Login(navController: NavController,viewModel: LoginVM) {
                 onValueChange = { NewPass ->
                     viewModel.password.value = NewPass
                 },
-                label = { Text("Contraseña",
-                    fontFamily = FontFamily.SansSerif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
+                label = {
+                    Text(
+                        "Contraseña",
+                        fontFamily = FontFamily.SansSerif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge
+                    )
+                },
 
                 modifier = Modifier
                     .width(330.dp)
@@ -167,7 +188,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             Button(
                 onClick = {
-                    viewModel.onLoginSelected(context)
+                    viewModel.onLoginSelected()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight

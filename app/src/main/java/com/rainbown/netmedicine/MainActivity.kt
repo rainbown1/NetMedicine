@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NetMedicineTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                //Nav()
+                Nav()
                 //home(modifier = Modifier.padding(innerPadding))
                     //Login(modifier = Modifier.padding(innerPadding))
                     //Registro(modifier = Modifier.padding(innerPadding))
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
                     //Servicios()
 
-                    CalendarWithTasks(modifier = Modifier.padding(innerPadding))
+                    //CalendarWithTasks(modifier = Modifier.padding(innerPadding))
 
                 }
             }
