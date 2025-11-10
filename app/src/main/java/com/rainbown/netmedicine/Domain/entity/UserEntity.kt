@@ -1,17 +1,9 @@
-package com.aristidevs.instadev.domain.entity
+package com.rainbown.netmedicine.domain.entity
 
 data class UserEntity(
-    val userId: String,
-    val name: String,
-    val nickname: String,
-    val followers: Int,
-    val following: List<String>,
-    val userMode: UserMode,
-    val verified:Boolean
+    val id: Int,
+    val nombre: String,
+    val apellido: String,
+    val correo: String,
+    val telefono: String
 )
-
-sealed class UserMode(val userType: Int) {
-    data object REGULAR_USER : UserMode(0)
-    data object CONTENT_CREATOR_USER : UserMode(1)
-    data object COMPANY_USER : UserMode(2)
-}

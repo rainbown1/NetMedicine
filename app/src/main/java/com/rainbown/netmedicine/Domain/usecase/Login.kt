@@ -1,15 +1,10 @@
-package com.aristidevs.instadev.domain.usecase
+package com.rainbown.netmedicine.domain.usecase
 
-import com.aristidevs.instadev.domain.entity.UserEntity
-import com.aristidevs.instadev.domain.repository.AuthRepository
-import javax.inject.Inject
+import com.rainbown.netmedicine.domain.entity.UserEntity
+import com.rainbown.netmedicine.domain.repository.AuthRepository
 
-class Login @Inject constructor(private val authRepository: AuthRepository) {
-    suspend operator fun invoke(user:String, password:String):UserEntity?{
-        if(user.contains("@hotmail.com")){
-            return null
-        }
-        val response = authRepository.doLogin(user, password)
-        return response.random()
+class Login(private val repository: AuthRepository) {
+    suspend operator fun invoke(correo: String, contraseña: String): UserEntity? {
+        return repository.login(correo, contraseña)
     }
 }
