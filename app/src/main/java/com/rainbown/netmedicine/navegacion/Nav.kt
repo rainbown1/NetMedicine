@@ -20,7 +20,7 @@ fun Nav() {
 
     NavHost(
         navController = navController,
-        startDestination = ScreenNav.pantallainicial.route
+        startDestination = ScreenNav.pantallaagenda.route
     ) {
         composable(route = ScreenNav.pantallainicial.route) {
             pantallainicial(navController)

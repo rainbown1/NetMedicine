@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.rainbown.netmedicine.View.Components.MyNavigationBar
+import com.rainbown.netmedicine.View.Components.barra
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.outlineLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
@@ -37,7 +39,7 @@ import java.util.Locale
 fun pantallaagendas(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-        CalendarWithTasks(modifier = Modifier)
+        CalendarWithTasks(modifier = Modifier, navController = navController)
     }
 }
 
@@ -62,15 +64,15 @@ enum class TipoTarea {
 @Composable
 fun CalendarWithTasks(
     viewModel: CalendarViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (tasksB, boton, menu) = createRefs()
+        val (barra,tasksB, menu,boton) = createRefs()
         var showCalendar by remember { mutableStateOf(false) }
 
         val selectedDateMillis by viewModel.selectedDate.collectAsState()
         val tareasFiltradas by viewModel.tareasFiltradas.collectAsState()
-        var refreshKey by remember { mutableStateOf(0) }
 
         var selectedDate = remember(selectedDateMillis) {
             selectedDateMillis?.let { formatDateToCalendar(it) } ?: ""
@@ -82,8 +84,21 @@ fun CalendarWithTasks(
 
         val datePickerState = rememberDatePickerState()
 
+        Box(modifier = Modifier.constrainAs(barra){
+            start.linkTo(parent.start)
+            top.linkTo(parent.top)
+            end.linkTo(parent.end )
+        }){
+            barra("Agenda")
+        }
         Column(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
+                .constrainAs(boton){
+                    start.linkTo(parent.start)
+                    top.linkTo(barra.bottom, margin = 15.dp)
+                    end.linkTo(parent.end)
+                }
         ) {
             Column(
                 modifier = Modifier
@@ -118,7 +133,7 @@ fun CalendarWithTasks(
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }){
-            // MyNavigationBar()
+            MyNavigationBar(navController)
         }//Box
 
         Box(modifier = Modifier.constrainAs(tasksB) {
@@ -133,26 +148,6 @@ fun CalendarWithTasks(
                     .fillMaxWidth()
                     .height(400.dp)
             )
-        }
-
-        Box(modifier = Modifier.constrainAs(boton) {
-            end.linkTo(tasksB.end, margin = 15.dp)
-            top.linkTo(tasksB.bottom, margin = 5.dp)
-            bottom.linkTo(menu.top)
-        }) {
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = onPrimaryContainerLight,
-                    contentColor = Color.White
-                ),
-                shape = CircleShape
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    contentDescription = ""
-                )
-            }
         }
 
         if (showCalendar) {
