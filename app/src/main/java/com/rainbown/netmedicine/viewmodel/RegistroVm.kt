@@ -29,7 +29,7 @@ class RegistroVm: ViewModel() {
 
     }
     fun onregistroSelected(context: Context) {
-        val url="http://192.168.137.1/Api_NetMedicine/registro.php"
+        val url="http://172.16.100.87/Api_NetMedicine/registro.php"
         val queue = Volley.newRequestQueue(context)
         var resultadoPost= object: StringRequest(
             Request.Method.POST,url,

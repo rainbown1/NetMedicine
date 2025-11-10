@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.ui.theme.onPrimaryLight
 import com.rainbown.netmedicine.ui.theme.onSecondaryLight
@@ -40,14 +43,13 @@ import com.rainbown.netmedicine.viewmodel.LoginVM
 @Composable
 fun pantallaservicios(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
         Servicios()
     }
 }
 @Composable
 fun Servicios() {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (header, content) = createRefs()
+        val (header,content,menu) = createRefs()
 
         Box(
             modifier = Modifier
@@ -79,6 +81,7 @@ fun Servicios() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .constrainAs(content) {
                     top.linkTo(header.bottom, margin = 45.dp)
                     bottom.linkTo(parent.bottom)
@@ -99,6 +102,14 @@ fun Servicios() {
                 }
             }
         }
+
+        Box(modifier = Modifier.background(primaryLight).fillMaxWidth().constrainAs(menu){
+            bottom.linkTo(parent.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }){
+           // MyNavigationBar()
+        }//Box
     }
 }
 
@@ -157,6 +168,7 @@ fun ServiceGridItem(servicio: Servicio) {
                 maxLines = 2
             )
         }
+
     }
 }
 

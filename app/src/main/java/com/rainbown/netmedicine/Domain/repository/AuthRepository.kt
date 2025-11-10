@@ -1,7 +1,7 @@
-package com.aristidevs.instadev.domain.repository
+package com.rainbown.netmedicine.domain.repository
 
-import com.aristidevs.instadev.domain.entity.UserEntity
+import com.rainbown.netmedicine.domain.entity.UserEntity
 
 interface AuthRepository {
-    suspend fun doLogin(user:String, password:String):List<UserEntity>
+    suspend fun login(correo: String, contraseña: String): UserEntity?
 }
