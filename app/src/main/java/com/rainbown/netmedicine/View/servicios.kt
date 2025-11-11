@@ -43,11 +43,11 @@ import com.rainbown.netmedicine.viewmodel.LoginVM
 @Composable
 fun pantallaservicios(navController: NavController){
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Servicios()
+        Servicios(navController = navController)
     }
 }
 @Composable
-fun Servicios() {
+fun Servicios(navController: NavController) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (header,content,menu) = createRefs()
 
@@ -108,7 +108,7 @@ fun Servicios() {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }){
-           // MyNavigationBar()
+           MyNavigationBar(navController)
         }//Box
     }
 }
