@@ -2,6 +2,7 @@ package com.rainbown.netmedicine.navegacion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,7 +18,7 @@ import com.rainbown.netmedicine.View.pantallaservicios
 @Composable
 fun Nav() {
     val navController = rememberNavController()
-
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = ScreenNav.pantallainicial.route
@@ -29,7 +30,7 @@ fun Nav() {
             pantallalogin(navController)
         }
         composable ( route= ScreenNav.pantallaregistro.route ){
-            pantallaregistro(navController)
+            pantallaregistro(navController, context = context )
         }
         composable ( route= ScreenNav.pantallaprincipal.route ){
             pantallaprincipal(navController)
