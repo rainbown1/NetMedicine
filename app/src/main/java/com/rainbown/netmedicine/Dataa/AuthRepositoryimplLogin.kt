@@ -16,7 +16,7 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
     override suspend fun login(correo: String, contraseña: String): UserEntity? =
         suspendCancellableCoroutine { continuation ->
 
-            val url = "http://192.168.1.2/Api_NetMedicine/login.php"
+            val url = "http://192.168.1.3/Api_NetMedicine/login.php"
             val queue = Volley.newRequestQueue(context)
 
             val request = object : StringRequest(
@@ -33,7 +33,8 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
                                 nombre = usuarioJson.getString("Nombre"),
                                 apellido = usuarioJson.getString("Apellido"),
                                 correo = usuarioJson.getString("Correo"),
-                                telefono = usuarioJson.getString("Telefono")
+                                telefono = usuarioJson.getString("Telefono"),
+                                contraseña = usuarioJson.getString("Contraseña")
                             )
 
                             continuation.resume(user)

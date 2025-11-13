@@ -4,4 +4,6 @@ import com.rainbown.netmedicine.domain.entity.UserEntity
 
 interface AuthRepository {
     suspend fun login(correo: String, contraseña: String): UserEntity?
+
+
 }

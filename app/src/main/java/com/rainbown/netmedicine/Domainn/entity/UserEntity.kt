@@ -5,5 +5,6 @@ data class UserEntity(
     val nombre: String,
     val apellido: String,
     val correo: String,
-    val telefono: String
+    val telefono: String,
+    val contraseña: String
 )

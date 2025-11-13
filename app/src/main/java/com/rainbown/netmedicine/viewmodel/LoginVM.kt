@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rainbown.netmedicine.domain.entity.UserEntity
-import com.rainbown.netmedicine.domain.usecase.Login
+import com.rainbown.netmedicine.domain.usecase.LoginUsecase
 import kotlinx.coroutines.launch
 
 class LoginVM(
-    private val loginUseCase: Login
+    private val loginUseCase: LoginUsecase
 ) : ViewModel() {
 
     val email = MutableLiveData<String>()

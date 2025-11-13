@@ -1,9 +1,11 @@
 package com.rainbown.netmedicine.View
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -12,10 +14,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -28,9 +29,12 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.rainbown.netmedicine.Dataa.AuthRepositoryimplRegistree
+import com.rainbown.netmedicine.Domainn.usecase.RegistreeUsecase
+
+
 import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.AppTypography
@@ -39,20 +43,37 @@ import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
 
 import com.rainbown.netmedicine.viewmodel.RegistroVm
-
+import com.rainbown.netmedicine.viewmodel.RegistroVmFactory
 
 
 @Composable
-fun pantallaregistro(navController: NavController){
+fun pantallaregistro(navController: NavController, context: Context){
+    val repository = AuthRepositoryimplRegistree(context)
+    val registreUsecase = RegistreeUsecase(repository)
+    val viewModel: RegistroVm = viewModel(
+        factory = RegistroVmFactory(registreUsecase)
+    )
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        val viewModel: RegistroVm = androidx.lifecycle.viewmodel.compose.viewModel()
-        Registro(navController, viewModel)
+        Box(modifier = Modifier.padding(innerPadding)) {
+            Registro(navController, viewModel)
+        }
     }
 }
 @Composable
 fun Registro(navController: NavController,viewModel: RegistroVm) {
     val context = LocalContext.current
-
+    val mensaje by viewModel.mensaje.observeAsState(initial = "")
+    if (mensaje.isNotEmpty()) {
+        android.widget.Toast.makeText(context, mensaje, android.widget.Toast.LENGTH_SHORT).show()
+    }
+    LaunchedEffect(mensaje) {
+        if (mensaje == "Registro completado correctamente") {
+            navController.navigate(route = ScreenNav.pantallalogin.route) {
+                popUpTo(ScreenNav.pantallaregistro.route) { inclusive = true }
+            }
+        }
+    }
 
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
@@ -61,6 +82,8 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
         val Telvm: String by viewModel.tel.observeAsState(initial ="")
         val mailvm: String by viewModel.email.observeAsState(initial ="")
         val passwordvm: String by viewModel.password.observeAsState(initial ="")
+
+
         val (nameField, apField, telField, emailField, passwordField, loginButton,registerButton) = createRefs()
         val (boxUser) = createRefs()
 
@@ -207,8 +230,9 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
 
             Button(
                 onClick = {
-                    viewModel.onregistroSelected(context)
+                    viewModel.onRegistroClicked()
                 },
+
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryLight
                 ),
