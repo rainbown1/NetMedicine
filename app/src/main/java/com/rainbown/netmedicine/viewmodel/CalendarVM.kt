@@ -1,79 +1,62 @@
 package com.rainbown.netmedicine.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rainbown.netmedicine.View.Tarea
-import com.rainbown.netmedicine.View.TipoTarea
-import com.rainbown.netmedicine.View.formatDateToShort
-import com.rainbown.netmedicine.View.getCurrentDateFormatted
-import com.rainbown.netmedicine.View.getTomorrowDateFormatted
+import com.rainbown.netmedicine.Dataa.TareaRepositoryImpl
+import com.rainbown.netmedicine.Domainn.entity.Tarea
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.N)
-class CalendarViewModel : ViewModel() {
-    private var _selectedDate = MutableStateFlow<Long?>(null)
-    var selectedDate: StateFlow<Long?> = _selectedDate.asStateFlow()
+class CalendarViewModel(private val context: Context) : ViewModel() {
 
-    private var _tareas = MutableStateFlow<List<Tarea>>(emptyList())
-    var tareas: StateFlow<List<Tarea>> = _tareas.asStateFlow()
+    private val repository = TareaRepositoryImpl(context)
 
-    val tareasFiltradas: StateFlow<List<Tarea>> =
-        selectedDate.combine(tareas) { date, tareasList ->
-            date?.let {
-                val fechaFiltro = formatDateToShort(it)
-                tareasList.filter { tarea -> tarea.fecha == fechaFiltro }
-            } ?: emptyList()
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            emptyList()
-        )
+    private val _tareas = MutableStateFlow<List<Tarea>>(emptyList())
+    val tareas: StateFlow<List<Tarea>> = _tareas
 
-    fun updateSelectedDate(dateMillis: Long?) {
-        _selectedDate.value = dateMillis
-    }
+    private val _tareasFiltradas = MutableStateFlow<List<Tarea>>(emptyList())
+    val tareasFiltradas: StateFlow<List<Tarea>> = _tareasFiltradas
 
-    fun loadTareas() {
-        // Cargar tareas desde tu fuente de datos
+    private val _selectedDate = MutableStateFlow<Long?>(null)
+    val selectedDate: StateFlow<Long?> = _selectedDate
+
+
+    fun loadTareas(correo: String) {
         viewModelScope.launch {
-            _tareas.value = listOf(
-                Tarea(
-                    id = 1,
-                    titulo = "Tomar medicamento A",
-                    descripcion = "1 tableta después del desayuno",
-                    fecha = getCurrentDateFormatted(),
-                    tipo = TipoTarea.MEDICAMENTO
-                ),
-                Tarea(
-                    id = 1,
-                    titulo = "Tomar medicamento A",
-                    descripcion = "1 tableta después del desayuno",
-                    fecha = getCurrentDateFormatted(),
-                    tipo = TipoTarea.MEDICAMENTO
-                ),
-                Tarea(
-                    id = 2,
-                    titulo = "Consulta con cardiólogo",
-                    descripcion = "Control mensual",
-                    fecha = getCurrentDateFormatted(),
-                    tipo = TipoTarea.CONSULTA
-                ),
-                Tarea(
-                    id = 3,
-                    titulo = "Examen de sangre",
-                    descripcion = "Ayuno 12 hrs",
-                    fecha = getTomorrowDateFormatted(),
-                    tipo = TipoTarea.EXAMEN
-                )
+            repository.obtenerTareas(
+                correo = correo,
+                onSuccess = { lista ->
+                    _tareas.value = lista
+                    _tareasFiltradas.value = lista
+                },
+                onError = { error ->
+                    println("Error al cargar tareas: $error")
+                }
             )
         }
+    }
+
+
+    fun updateSelectedDate(dateMillis: Long) {
+        _selectedDate.value = dateMillis
+
+        val fechaCorta = formatDateToShort(dateMillis)
+
+        val filtradas = _tareas.value.filter { tarea ->
+            tarea.Fecha.trim() == fechaCorta.trim()
+        }
+
+        _tareasFiltradas.value = filtradas
+        println("Fecha seleccionada: $fechaCorta — ${filtradas.size} tareas encontradas")
+    }
+
+
+    private fun formatDateToShort(millis: Long): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES"))
+        return sdf.format(Date(millis))
     }
 }

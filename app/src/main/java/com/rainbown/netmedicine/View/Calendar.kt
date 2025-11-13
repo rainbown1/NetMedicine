@@ -1,5 +1,6 @@
 package com.rainbown.netmedicine.View
 
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,89 +13,96 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.rainbown.netmedicine.Domainn.entity.Tarea
+import com.rainbown.netmedicine.Domainn.entity.TipoTarea
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
+import com.rainbown.netmedicine.viewmodel.CalendarViewModel
+import com.rainbown.netmedicine.viewmodel.CalendarVMFactory
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.outlineLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
-import com.rainbown.netmedicine.viewmodel.CalendarViewModel
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun pantallaagendas(navController: NavController){
+fun pantallaagendas(navController: NavController) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-        CalendarWithTasks(modifier = Modifier, navController = navController)
+        CalendarWithTasks(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController
+        )
     }
 }
 
-// Modelo de datos para las tareas
-data class Tarea(
-    val id: Int,
-    val titulo: String,
-    val descripcion: String,
-    val fecha: String,
-    val tipo: TipoTarea,
-    val completada: Boolean = false
-)
+// Modelo de datos visual (usa los datos del servidor)
 
-enum class TipoTarea {
-    MEDICAMENTO,
-    CONSULTA,
-    EXAMEN,
-    RECORDATORIO
-}
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun CalendarWithTasks(
-    viewModel: CalendarViewModel = viewModel(),
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
+    val context = LocalContext.current
+    val viewModel: CalendarViewModel = viewModel(factory = CalendarVMFactory(context))
+
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (barra,tasksB, menu,boton) = createRefs()
+        val (barra, tasksB, menu, boton) = createRefs()
         var showCalendar by remember { mutableStateOf(false) }
 
         val selectedDateMillis by viewModel.selectedDate.collectAsState()
         val tareasFiltradas by viewModel.tareasFiltradas.collectAsState()
 
-        var selectedDate = remember(selectedDateMillis) {
+        val selectedDate = remember(selectedDateMillis) {
             selectedDateMillis?.let { formatDateToCalendar(it) } ?: ""
         }
 
         LaunchedEffect(Unit) {
-            viewModel.loadTareas()
+            val sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+            val correoUsuario = sharedPref.getString("correo", null)
+
+            if (correoUsuario != null) {
+                println("Cargando tareas para $correoUsuario")
+                viewModel.loadTareas(correoUsuario)
+            } else {
+                println("No se encontró correo guardado")
+            }
         }
+
+
 
         val datePickerState = rememberDatePickerState()
 
-        Box(modifier = Modifier.constrainAs(barra){
-            start.linkTo(parent.start)
-            top.linkTo(parent.top)
-            end.linkTo(parent.end )
-        }){
+        // Barra superior
+        Box(
+            modifier = Modifier.constrainAs(barra) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+            }
+        ) {
             barra("Agenda")
         }
+
+        // Botón calendario
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .constrainAs(boton){
+                .constrainAs(boton) {
                     start.linkTo(parent.start)
                     top.linkTo(barra.bottom, margin = 15.dp)
                     end.linkTo(parent.end)
@@ -125,17 +133,23 @@ fun CalendarWithTasks(
                     textAlign = TextAlign.Center
                 )
             }
-
         }
 
-        Box(modifier = Modifier.background(primaryLight).fillMaxWidth().constrainAs(menu){
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }){
-            MyNavigationBar(navController)
-        }//Box
 
+        Box(
+            modifier = Modifier
+                .background(primaryLight)
+                .fillMaxWidth()
+                .constrainAs(menu) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        ) {
+            MyNavigationBar(navController)
+        }
+
+        // Lista de tareas
         Box(modifier = Modifier.constrainAs(tasksB) {
             start.linkTo(parent.start)
             bottom.linkTo(menu.top)
@@ -150,6 +164,7 @@ fun CalendarWithTasks(
             )
         }
 
+        // Selector de fecha
         if (showCalendar) {
             DatePickerDialog(
                 onDismissRequest = { showCalendar = false },
@@ -160,7 +175,8 @@ fun CalendarWithTasks(
                                 viewModel.updateSelectedDate(dateMillis)
                             }
                             showCalendar = false
-                        }) {
+                        }
+                    ) {
                         Text("Seleccionar")
                     }
                 },
@@ -171,15 +187,15 @@ fun CalendarWithTasks(
                 }
             ) {
                 DatePicker(state = datePickerState)
-                HorizontalDivider(thickness = 2.dp, color = outlineLight, modifier = Modifier
-                    .width(270.dp))
+                HorizontalDivider(
+                    thickness = 2.dp,
+                    color = outlineLight,
+                    modifier = Modifier.width(270.dp)
+                )
             }
-
         }
     }
 }
-
-
 
 @Composable
 fun TaskBar(
@@ -254,20 +270,21 @@ fun TaskItem(tarea: Tarea) {
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(Modifier.weight(1f)) {
-                Text(tarea.titulo, fontWeight = FontWeight.Bold)
-                Text(tarea.descripcion, maxLines = 2)
+                Text(tarea.Titulo, fontWeight = FontWeight.Bold)
+                Text(tarea.Descripcion, maxLines = 2)
             }
 
             Box(
                 modifier = Modifier
                     .size(12.dp)
-                    .background(if (tarea.completada) Color.Green else Color.Red, CircleShape)
+                    .clip(CircleShape)
+                    .background(if (tarea.completada) Color.Green else Color.Red)
             )
         }
     }
 }
 
-// Colores
+
 fun getTaskColor(tipo: TipoTarea): Color = when (tipo) {
     TipoTarea.MEDICAMENTO -> Color(0xFF4CAF50)
     TipoTarea.CONSULTA -> Color(0xFF2196F3)
@@ -275,7 +292,7 @@ fun getTaskColor(tipo: TipoTarea): Color = when (tipo) {
     TipoTarea.RECORDATORIO -> Color(0xFF9C27B0)
 }
 
-// Formatos de fecha
+
 @RequiresApi(Build.VERSION_CODES.N)
 fun formatDateToCalendar(millis: Long): String =
     SimpleDateFormat("EEEE, d MMMM yyyy", Locale("es", "ES")).format(Date(millis))
@@ -283,14 +300,3 @@ fun formatDateToCalendar(millis: Long): String =
 @RequiresApi(Build.VERSION_CODES.N)
 fun formatDateToShort(millis: Long): String =
     SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES")).format(Date(millis))
-
-@RequiresApi(Build.VERSION_CODES.N)
-fun getCurrentDateFormatted(): String =
-    SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES")).format(Date())
-
-@RequiresApi(Build.VERSION_CODES.N)
-fun getTomorrowDateFormatted(): String {
-    val calendar = java.util.Calendar.getInstance()
-    calendar.add(java.util.Calendar.DAY_OF_YEAR, 1)
-    return SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES")).format(calendar.time)
-}
