@@ -11,49 +11,55 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.data.repository.AuthRepositoryImpl
+import com.rainbown.netmedicine.domain.usecase.LoginUsecase
 import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.AppTypography
 import com.rainbown.netmedicine.ui.theme.inverseSurfaceLightMediumContrast
 import com.rainbown.netmedicine.ui.theme.primaryLight
 import com.rainbown.netmedicine.viewmodel.LoginVM
+
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
-import com.rainbown.netmedicine.data.repository.AuthRepositoryImpl
-
+import android.widget.Toast
 
 @Composable
-fun pantallalogin(navController: NavController){
+fun pantallalogin(navController: NavController) {
     val context = LocalContext.current
     val repository = AuthRepositoryImpl(context)
-    val loginUseCase = com.rainbown.netmedicine.domain.usecase.LoginUsecase(repository)
-    val viewModel = remember { LoginVM(loginUseCase) }
+    val loginUseCase = LoginUsecase(repository)
+
+
+    val viewModel: LoginVM = viewModel(factory = LoginVM.LoginVMFactory(loginUseCase, context))
+
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Login(navController, viewModel)
     }
-
 }
+
 @Composable
-fun Login(navController: NavController,viewModel: LoginVM) {
+fun Login(navController: NavController, viewModel: LoginVM) {
     val context = LocalContext.current
     val usuario by viewModel.usuarioLiveData.observeAsState()
     val error by viewModel.errorLiveData.observeAsState()
+    val mailvm by viewModel.email.observeAsState("")
+    val passwordvm by viewModel.password.observeAsState("")
+
 
     LaunchedEffect(usuario) {
         usuario?.let {
@@ -63,19 +69,16 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }
     }
 
+
     LaunchedEffect(error) {
         error?.let {
-            android.widget.Toast.makeText(context, it, android.widget.Toast.LENGTH_LONG).show()
-            viewModel.errorLiveData.value = null
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            viewModel.clearError()
         }
     }
 
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val mailvm: String by viewModel.email.observeAsState(initial = "")
-        val usuario by viewModel.usuarioLiveData.observeAsState()
-        val passwordvm: String by viewModel.password.observeAsState(initial = "")
-        val (emailField, passwordField, loginButton, registerButton) = createRefs()
-        val (boxIcon) = createRefs()
+        val (boxIcon, emailField, passwordField, loginButton, registerButton) = createRefs()
 
         Box(modifier = Modifier.constrainAs(boxIcon) {
             top.linkTo(parent.top, margin = 50.dp)
@@ -84,7 +87,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             Image(
                 painter = painterResource(R.drawable.logo),
-                contentDescription = " ",
+                contentDescription = "Logo",
                 modifier = Modifier
                     .width(200.dp)
                     .height(180.dp)
@@ -98,9 +101,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             OutlinedTextField(
                 value = mailvm,
-                onValueChange = { Newmail ->
-                    viewModel.email.value = Newmail
-                },
+                onValueChange = { viewModel.email.value = it },
                 label = {
                     Text(
                         "Correo electrónico",
@@ -112,39 +113,12 @@ fun Login(navController: NavController,viewModel: LoginVM) {
                         style = AppTypography.labelLarge
                     )
                 },
-
                 modifier = Modifier
                     .width(330.dp)
                     .height(60.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
         }
-
-//        Box(modifier = Modifier.constrainAs(userField) {
-//            top.linkTo(emailField.bottom, margin = 25.dp)
-//            start.linkTo(parent.start)
-//            end.linkTo(parent.end)
-//        }) {
-//            OutlinedTextField(
-//                value = usrvm,
-//                onValueChange = { newUsr->
-//
-//                    viewModel.usr.value = newUsr
-//                },
-//                label = { Text("Usuario",
-//                    fontFamily = FontFamily.SansSerif,
-//                    letterSpacing = 1.2.sp,
-//                    fontSize = 17.sp,
-//                    textDecoration = TextDecoration.Underline,
-//                    fontWeight = FontWeight.W400,
-//                    style = AppTypography.labelLarge) },
-//
-//                modifier = Modifier
-//                    .width(330.dp)
-//                    .height(60.dp),
-//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-//            )
-//        }
 
         Box(modifier = Modifier.constrainAs(passwordField) {
             top.linkTo(emailField.bottom, margin = 25.dp)
@@ -153,9 +127,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
         }) {
             OutlinedTextField(
                 value = passwordvm,
-                onValueChange = { NewPass ->
-                    viewModel.password.value = NewPass
-                },
+                onValueChange = { viewModel.password.value = it },
                 label = {
                     Text(
                         "Contraseña",
@@ -167,7 +139,6 @@ fun Login(navController: NavController,viewModel: LoginVM) {
                         style = AppTypography.labelLarge
                     )
                 },
-
                 modifier = Modifier
                     .width(330.dp)
                     .height(60.dp),
@@ -176,20 +147,14 @@ fun Login(navController: NavController,viewModel: LoginVM) {
             )
         }
 
-        // botenes de abajoo
-
         Box(modifier = Modifier.constrainAs(loginButton) {
             top.linkTo(passwordField.bottom, margin = 50.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             Button(
-                onClick = {
-                    viewModel.onLoginSelected()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryLight
-                ),
+                onClick = { viewModel.onLoginSelected() },
+                colors = ButtonDefaults.buttonColors(containerColor = primaryLight),
                 modifier = Modifier
                     .width(330.dp)
                     .height(55.dp)
@@ -215,9 +180,7 @@ fun Login(navController: NavController,viewModel: LoginVM) {
                 onClick = {
                     navController.navigate(route = ScreenNav.pantallaregistro.route)
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryLight
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = primaryLight),
                 modifier = Modifier
                     .width(330.dp)
                     .height(55.dp)
@@ -232,7 +195,6 @@ fun Login(navController: NavController,viewModel: LoginVM) {
                     textDecoration = TextDecoration.Underline,
                     style = AppTypography.labelLarge
                 )
-
             }
         }
     }
