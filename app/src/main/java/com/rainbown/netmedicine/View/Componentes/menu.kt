@@ -44,9 +44,8 @@ fun MyNavigationBar(navController: NavController){
                 selected = selectedItem == index,
                 onClick = {
                     when(item){
-                        "Agenda" -> navController.navigate(route = ScreenNav.pantallaagenda.route)
-                        //"Hospitales" -> navController.navigate("hospitalesScreen")
-                        //"Medicos" -> navController.navigate("medicoScreen")
+                        "Inicio" -> navController.navigate(route = ScreenNav.pantallaprincipal.route)
+                        "Hospitales" -> navController.navigate(route = ScreenNav.pantallahospitales.route)
                         "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
                     }
                 }

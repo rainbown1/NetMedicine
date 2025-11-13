@@ -122,8 +122,8 @@ fun inicio(navController: NavController){
 
                             when(titulo){
                                 "Agenda" -> navController.navigate(route = ScreenNav.pantallaagenda.route)
-                                //"Hospitales" -> navController.navigate("hospitalesScreen")
-                                //"Medicos" -> navController.navigate("medicoScreen")
+                                "Hospitales" -> navController.navigate(route= ScreenNav.pantallahospitales.route)
+                                "Medicos" -> navController.navigate(route= ScreenNav.pantallahospitales.route)
                                 "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
                             }
                         },
