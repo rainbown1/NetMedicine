@@ -39,7 +39,7 @@ fun barra(
                 fontFamily = FontFamily.Serif,
                 fontSize = 18.sp,
                 color = onPrimaryLight,
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(10.dp)
             )
             }
         }
