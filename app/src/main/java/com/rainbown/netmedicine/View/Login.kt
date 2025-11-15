@@ -105,7 +105,7 @@ fun Login(navController: NavController, viewModel: LoginVM) {
                 label = {
                     Text(
                         "Correo electrónico",
-                        fontFamily = FontFamily.SansSerif,
+                        fontFamily = FontFamily.Serif,
                         letterSpacing = 1.2.sp,
                         fontSize = 17.sp,
                         textDecoration = TextDecoration.Underline,
@@ -131,7 +131,7 @@ fun Login(navController: NavController, viewModel: LoginVM) {
                 label = {
                     Text(
                         "Contraseña",
-                        fontFamily = FontFamily.SansSerif,
+                        fontFamily = FontFamily.Serif,
                         letterSpacing = 1.2.sp,
                         fontSize = 17.sp,
                         textDecoration = TextDecoration.Underline,
@@ -162,7 +162,7 @@ fun Login(navController: NavController, viewModel: LoginVM) {
                 Text(
                     "Iniciar Sesión",
                     color = inverseSurfaceLightMediumContrast,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W500,
@@ -188,7 +188,7 @@ fun Login(navController: NavController, viewModel: LoginVM) {
                 Text(
                     "Registrarse",
                     color = inverseSurfaceLightMediumContrast,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W500,

@@ -14,7 +14,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -26,6 +25,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
+import com.rainbown.netmedicine.navegacion.ScreenNav
 
 @Composable
 fun pantallarecetas(navController: NavController){
@@ -92,7 +92,7 @@ fun RecetaCard(receta: Receta){
             Text(
                 text = receta.medicamento,
                 fontSize = 12.sp,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
@@ -102,7 +102,7 @@ fun RecetaCard(receta: Receta){
                 Text(
                     text = receta.cantidad,
                     fontSize = 12.sp,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 8.dp)
@@ -110,7 +110,7 @@ fun RecetaCard(receta: Receta){
                 Text(
                     text = receta.admin,
                     fontSize = 12.sp,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 8.dp)
@@ -119,7 +119,7 @@ fun RecetaCard(receta: Receta){
             Text(
                 text = receta.admin,
                 fontSize = 12.sp,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = FontFamily.Serif,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp)
@@ -127,7 +127,7 @@ fun RecetaCard(receta: Receta){
             Text(
                 text = receta.otro,
                 fontSize = 12.sp,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = FontFamily.Serif,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp)

@@ -114,8 +114,8 @@ fun inicio(navController: NavController){
             Column (modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)){
                 //Icons y labels
-                val icons = listOf(Icons.Outlined.ViewAgenda, Icons.Filled.MedicalServices, Icons.Outlined.Markunread,Icons.Outlined.Medication, Icons.Default.Receipt)
-                val labels = listOf("Agenda", "Medicos", "Servicios","Hospitales", "Receta Medica")
+                val icons = listOf(Icons.Outlined.ViewAgenda,  Icons.Outlined.Markunread,Icons.Outlined.Medication, Icons.Default.Receipt)
+                val labels = listOf("Agenda",  "Servicios","Hospitales", "Receta Medica")
 
                 labels.forEachIndexed { index, titulo ->
                     ElevatedCard (
@@ -124,7 +124,6 @@ fun inicio(navController: NavController){
                             when(titulo){
                                 "Agenda" -> navController.navigate(route = ScreenNav.pantallaagenda.route)
                                 "Hospitales" -> navController.navigate(route= ScreenNav.pantallahospitales.route)
-                                "Medicos" -> navController.navigate(route= ScreenNav.pantallahospitales.route)
                                 "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
                                 "Receta Medica" -> navController.navigate(route = ScreenNav.pantallarecetas.route)
                             }

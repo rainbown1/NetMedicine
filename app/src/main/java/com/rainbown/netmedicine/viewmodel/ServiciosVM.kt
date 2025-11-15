@@ -1,7 +1,6 @@
 package com.rainbown.netmedicine.viewmodel
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -10,8 +9,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.View.Components.barra
 import com.rainbown.netmedicine.View.filtroServicio
-import com.rainbown.netmedicine.View.hospitales
 import com.rainbown.netmedicine.View.servicios
+import com.rainbown.netmedicine.navegacion.ScreenNav
 
 data class InfoService(
     val funciones: String,
@@ -41,7 +40,7 @@ fun InfoService(navController: NavController, servicioId: String?) {
             top.linkTo(parent.top)
             end.linkTo(parent.end)
         }){
-            barra("Servicio -> $nombreServicio")
+            barra("Servicio -> $nombreServicio"  )
         }
 
         Box(modifier = Modifier.constrainAs(titulo){

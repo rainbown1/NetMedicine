@@ -157,7 +157,7 @@ fun ServiceGridItem(servicio: Servicio) {
             Text(
                 text = servicio.nombre,
                 fontSize = 17.sp,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
@@ -167,7 +167,7 @@ fun ServiceGridItem(servicio: Servicio) {
             Text(
                 text = servicio.descripcion,
                 fontSize = 13.sp,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = FontFamily.Serif,
                 color = Color.DarkGray,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 4.dp),

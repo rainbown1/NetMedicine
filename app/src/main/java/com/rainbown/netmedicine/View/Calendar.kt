@@ -30,6 +30,7 @@ import com.rainbown.netmedicine.Domainn.entity.Tarea
 import com.rainbown.netmedicine.Domainn.entity.TipoTarea
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
+import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.viewmodel.CalendarViewModel
 import com.rainbown.netmedicine.viewmodel.CalendarVMFactory
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight

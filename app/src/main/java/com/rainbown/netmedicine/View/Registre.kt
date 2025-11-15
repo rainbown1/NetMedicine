@@ -112,7 +112,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
                     viewModel.nombre.value = newName
                 },
                 label = { Text("Nombre",
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W400,
@@ -136,7 +136,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
                     viewModel.lastName.value = newLastname
                 },
                 label = { Text("Apellido",
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W400,
@@ -160,7 +160,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
                     viewModel.tel.value = Newtel
                 },
                 label = { Text("Teléfono",
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W400,
@@ -184,7 +184,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
                     viewModel.email.value = Newmail
                 },
                 label = { Text("Correo electrónico",
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W400,
@@ -208,7 +208,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
                     viewModel.password.value = NewPass
                 },
                 label = { Text("Contraseña",
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W400,
@@ -242,7 +242,7 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             ) {
                 Text("Iniciar Sesion",
                     color = inverseSurfaceLightMediumContrast,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
@@ -269,11 +269,10 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
                 Text(
                     "Regresar al Inicio",
                     color = onPrimaryContainerLight,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W700,
-                    textDecoration = TextDecoration.Underline,
                     style = AppTypography.labelLarge
                     )
             }

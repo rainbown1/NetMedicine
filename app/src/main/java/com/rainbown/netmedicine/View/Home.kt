@@ -47,7 +47,7 @@ fun home(navController: NavController) {
             Text(
                 "BIENVENIDO",
                 color = primaryLight,
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = FontFamily.Serif,
                 letterSpacing = 1.2.sp,
                 fontSize = 50.sp,
                 fontWeight = FontWeight.W900
@@ -86,7 +86,7 @@ fun home(navController: NavController) {
             ) {
                 Text("Iniciar Sesion",
                     color = inverseSurfaceLightMediumContrast,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
@@ -109,7 +109,7 @@ fun home(navController: NavController) {
             ) {
                 Text("Registrarse",
                     color = onPrimaryContainerLight,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.Serif,
                     letterSpacing = 1.2.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
