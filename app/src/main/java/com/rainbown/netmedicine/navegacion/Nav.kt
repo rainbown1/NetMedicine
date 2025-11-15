@@ -2,6 +2,7 @@ package com.rainbown.netmedicine.navegacion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.internal.composableLambda
 
 import androidx.compose.ui.platform.LocalContext
 
@@ -15,7 +16,9 @@ import com.rainbown.netmedicine.View.pantallaagendas
 import com.rainbown.netmedicine.View.pantallahospitales
 import com.rainbown.netmedicine.View.pantallainicial
 import com.rainbown.netmedicine.View.pantallalogin
+import com.rainbown.netmedicine.View.pantallaperfil
 import com.rainbown.netmedicine.View.pantallaprincipal
+import com.rainbown.netmedicine.View.pantallarecetas
 import com.rainbown.netmedicine.View.pantallaregistro
 import com.rainbown.netmedicine.View.pantallaservicios
 
@@ -27,7 +30,7 @@ fun Nav() {
     val context = LocalContext.current
     NavHost(
         navController = navController,
-        startDestination = ScreenNav.pantallainicial.route
+        startDestination = ScreenNav.pantallaprincipal.route
     ) {
         composable(route = ScreenNav.pantallainicial.route) {
             pantallainicial(navController)
@@ -53,6 +56,12 @@ fun Nav() {
         composable(route= "medicos/{hospitalId}") { backStackEntry ->
             val hospitalId = backStackEntry.arguments?.getString("hospitalId")
             PantallaMedicosPorHospital(navController, hospitalId)
+        }
+        composable(route = ScreenNav.pantallarecetas.route) {
+            pantallarecetas(navController)
+        }
+        composable(route = ScreenNav.pantallaperfil.route) {
+            pantallaperfil(navController)
         }
     }
 }

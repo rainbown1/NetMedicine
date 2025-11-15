@@ -47,6 +47,12 @@ fun pantallaservicios(navController: NavController){
     }
 }
 @Composable
+fun serviciosinfo(navController: NavController){
+    Scaffold (modifier = Modifier.fillMaxSize()){ innerPadding ->
+        Servicios(navController = navController)
+    }
+}
+@Composable
 fun Servicios(navController: NavController) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (header,content,menu) = createRefs()
@@ -173,19 +179,27 @@ fun ServiceGridItem(servicio: Servicio) {
 }
 
 val servicios = listOf(
-    Servicio("Consultas", Icons.Outlined.MedicalServices, "Atención médica"),
-    Servicio("Hospitales", Icons.Outlined.LocalHospital, "Ubicación"),
-    Servicio("Calendario", Icons.Outlined.CalendarMonth, "Citas Agendadas"),
-    Servicio("Especialidades", Icons.Outlined.MedicalInformation, "Cardiología, etc."),
-    Servicio("Laboratorio", Icons.Outlined.Science, "Análisis Clínicos"),
-    Servicio("Vacunación", Icons.Outlined.Vaccines, "Cartilla de Vacunación"),
-    Servicio("Farmacia", Icons.Outlined.Medication, "Medicamentos"),
-    Servicio("Rehabilitación", Icons.Outlined.Accessibility, "Terapias"),
-    Servicio("Nutrición", Icons.Outlined.Restaurant, "Asesoría"),
-    Servicio("Psicología", Icons.Outlined.Psychology, "Apoyo emocional")
+    Servicio("S1","Consultas", Icons.Outlined.MedicalServices, "Atención médica"),
+    Servicio("S2","Hospitales", Icons.Outlined.LocalHospital, "Ubicación"),
+    Servicio("S3","Calendario", Icons.Outlined.CalendarMonth, "Citas Agendadas"),
+    Servicio("S4","Especialidades", Icons.Outlined.MedicalInformation, "Cardiología, etc."),
+    Servicio("S5","Laboratorio", Icons.Outlined.Science, "Análisis Clínicos"),
+    Servicio("S6","Vacunación", Icons.Outlined.Vaccines, "Cartilla de Vacunación"),
+    Servicio("S7","Farmacia", Icons.Outlined.Medication, "Medicamentos"),
+    Servicio("S8","Rehabilitación", Icons.Outlined.Accessibility, "Terapias"),
+    Servicio("S9","Nutrición", Icons.Outlined.Restaurant, "Asesoría"),
+    Servicio("S10","Psicología", Icons.Outlined.Psychology, "Apoyo emocional"),
+    Servicio("S11","", Icons.Outlined.Psychology, ""),
+    Servicio("S12","", Icons.Outlined.Psychology, ""),
+
 )
 
+fun filtroServicio(servicioId: String): List<Servicio>{
+    return servicios.filter { it.servicioId == servicioId }
+}
+
 data class Servicio(
+    val servicioId: String,
     val nombre: String,
     val icono: androidx.compose.ui.graphics.vector.ImageVector,
     val descripcion: String

@@ -26,6 +26,7 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
                         val json = JSONObject(response)
 
                         if (json.optBoolean("success") && json.has("usuario")) {
+
                             val usuarioJson = json.getJSONObject("usuario")
 
                             val user = UserEntity(

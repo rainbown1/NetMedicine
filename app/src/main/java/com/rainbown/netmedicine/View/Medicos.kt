@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MedicalServices
+import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material.icons.outlined.Markunread
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.ViewAgenda
@@ -136,16 +137,16 @@ fun Medicos(modifier: Modifier, navController: NavController, hospitalId: String
 }
 
 val medicos = listOf(
-            Medico("DR. J. Lauriel Arzac Ramirez","Medico General","Hospital 5"),
-            Medico("DR. 1", "Especialidad 1", "H1"),
-            Medico("DR. 2", "Especialidad 1", "H1"),
-            Medico("DR. 3", "Especialidad 1", "H2"),
-            Medico("DR. 4", "Especialidad 1", "H2"),
-            Medico("DR. 5", "Especialidad 1", "H3"),
-            Medico("DR. 6", "Especialidad 1", "H3"),
-            Medico("DR. 7", "Especialidad 1", "H4"),
-            Medico("DR. 8", "Especialidad 1", "H4"),
-            Medico("DR. 9", "Especialidad 1", "H5")
+            Medico("DR. J. Lauriel Arzac Ramirez","Medico General","Hospital 5", "3321767856"),
+            Medico("DR. 1", "Especialidad 1", "H1", "3321767856"),
+            Medico("DR. 2", "Especialidad 1", "H1", "3321767856"),
+            Medico("DR. 3", "Especialidad 1", "H2", "3321767856"),
+            Medico("DR. 4", "Especialidad 1", "H2", "3321767856"),
+            Medico("DR. 5", "Especialidad 1", "H3", "3321767856"),
+            Medico("DR. 6", "Especialidad 1", "H3", "3321767856"),
+            Medico("DR. 7", "Especialidad 1", "H4", "3321767856"),
+            Medico("DR. 8", "Especialidad 1", "H4", "3321767856"),
+            Medico("DR. 9", "Especialidad 1", "H5", "3321767856")
 )
 
 @Composable
@@ -166,7 +167,7 @@ fun MedicosCards(medico: Medico){
         Row (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(5.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -200,24 +201,46 @@ fun MedicosCards(medico: Medico){
                     modifier = Modifier.padding(top = 4.dp),
                     maxLines = 2
                 )
-                OutlinedButton(
-                    onClick = { }
-                ) {
-                    Row {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Ubicacion de hospital"
-                        )
-                        Text(
-                            text = medico.idHospital,
-                            fontSize = 13.sp,
-                            fontFamily = FontFamily.SansSerif,
-                            color = Color.DarkGray,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(top = 4.dp),
-                            maxLines = 2
-                        )
-                    } //Row
+                Row {
+
+                    OutlinedButton(
+                        onClick = { }
+                    ) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.LocationOn,
+                                contentDescription = "Ubicacion de hospital"
+                            )
+                            Text(
+                                text = medico.idHospital,
+                                fontSize = 13.sp,
+                                fontFamily = FontFamily.SansSerif,
+                                color = Color.DarkGray,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(top = 4.dp),
+                                maxLines = 2
+                            )
+                        } //Row
+                    }
+                    OutlinedButton(
+                        onClick = {}
+                    ) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.Whatsapp,
+                                contentDescription = "Contacto"
+                            )
+                            Text(
+                                text = medico.contacto,
+                                fontSize = 13.sp,
+                                fontFamily = FontFamily.SansSerif,
+                                color = Color.DarkGray,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(top = 4.dp),
+                                maxLines = 2
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -228,5 +251,6 @@ fun MedicosCards(medico: Medico){
 data class Medico(
     val nombre: String,
     val especialidad: String,
-    val idHospital: String
+    val idHospital: String,
+    val contacto: String
 )

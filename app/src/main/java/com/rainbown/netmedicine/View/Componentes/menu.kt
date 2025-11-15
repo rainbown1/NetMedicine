@@ -47,6 +47,7 @@ fun MyNavigationBar(navController: NavController){
                         "Inicio" -> navController.navigate(route = ScreenNav.pantallaprincipal.route)
                         "Hospitales" -> navController.navigate(route = ScreenNav.pantallahospitales.route)
                         "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
+                        "Perfil" -> navController.navigate(route = ScreenNav.pantallaperfil.route)
                     }
                 }
 
