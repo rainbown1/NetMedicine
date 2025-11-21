@@ -30,7 +30,7 @@ fun Nav() {
     val context = LocalContext.current
     NavHost(
         navController = navController,
-        startDestination = ScreenNav.pantallaprincipal.route
+        startDestination = ScreenNav.pantallainicial.route
     ) {
         composable(route = ScreenNav.pantallainicial.route) {
             pantallainicial(navController)
@@ -57,9 +57,12 @@ fun Nav() {
             val hospitalId = backStackEntry.arguments?.getString("hospitalId")
             PantallaMedicosPorHospital(navController, hospitalId)
         }
-        composable(route = ScreenNav.pantallarecetas.route) {
-            pantallarecetas(navController)
-        }
+       composable (route= ScreenNav.pantallarecetas.route){
+           pantallarecetas(navController,context)
+       }
+
+
+
         composable(route = ScreenNav.pantallaperfil.route) {
             pantallaperfil(navController)
         }

@@ -126,6 +126,7 @@ fun inicio(navController: NavController){
                                 "Hospitales" -> navController.navigate(route= ScreenNav.pantallahospitales.route)
                                 "Servicios" -> navController.navigate(route = ScreenNav.pantallaservicios.route)
                                 "Receta Medica" -> navController.navigate(route = ScreenNav.pantallarecetas.route)
+
                             }
                         },
                         elevation = CardDefaults.cardElevation(8.dp),

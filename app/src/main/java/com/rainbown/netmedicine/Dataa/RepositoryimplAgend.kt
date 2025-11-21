@@ -18,7 +18,7 @@ class TareaRepositoryImpl(private val context: Context) : AgendRepository {
         onSuccess: (List<Tarea>) -> Unit,
         onError: (String) -> Unit
     ) {
-        val url = "http://192.168.1.3/Api_NetMedicine/agenda.php"
+        val url = "http://192.168.1.5/Api_NetMedicine/agenda.php"
         val queue = Volley.newRequestQueue(context)
 
         val request = object : StringRequest(
@@ -39,7 +39,7 @@ class TareaRepositoryImpl(private val context: Context) : AgendRepository {
                             else -> TipoTarea.RECORDATORIO
                         }
 
-                        val fechaOriginal = obj.getString("Fecha") // "2025-11-13" o similar
+                        val fechaOriginal = obj.getString("Fecha")
                         val fechaFormateada = try {
                             val parser = SimpleDateFormat("yyyy-MM-dd", Locale("es", "ES"))
                             val date = parser.parse(fechaOriginal)
