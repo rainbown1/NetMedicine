@@ -42,6 +42,7 @@ android {
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.volley)
+    implementation(libs.coil.compose)
     implementation(libs.bundles.camerax)
     implementation(libs.hilt.android)
     implementation(libs.androidx.core.ktx)

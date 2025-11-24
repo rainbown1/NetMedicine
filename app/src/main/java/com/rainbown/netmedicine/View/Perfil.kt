@@ -1,12 +1,6 @@
 package com.rainbown.netmedicine.View
 
-import android.Manifest
-import android.content.Context
-import android.view.ViewGroup
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.view.LifecycleCameraController
-import androidx.camera.view.PreviewView
+import androidx.compose.animation.EnterTransition.Companion.None
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,13 +16,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,36 +32,27 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.rainbown.netmedicine.R
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
 import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
-import org.jetbrains.annotations.Async
 import java.io.File
-import java.util.concurrent.Executor
 
 @Composable
 fun pantallaperfil(navController: NavController){
@@ -81,6 +66,10 @@ fun pantallaperfil(navController: NavController){
 fun PerfilScreen(navController: NavController, modifier: Modifier){
 
     ConstraintLayout (modifier = Modifier.fillMaxSize() ){
+
+        val context = LocalContext.current
+        val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+        val fotoPerfilPath = savedStateHandle?.get<String>("FOTO_PERFIL")
 
         val (barra,img,content,menu) = createRefs()
         val radioOptions = listOf("Hombre", "Mujer", "Otro")
@@ -115,23 +104,33 @@ fun PerfilScreen(navController: NavController, modifier: Modifier){
                     .padding(16.dp)
             ) {
 
-                Row {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(route = ScreenNav.pantallacamara.route)
+
+                    Row {
+                        IconButton(
+                            onClick = {
+                                navController.navigate(route = ScreenNav.pantallacamara.route)
+                            },
+                            shape = CircleShape,
+                            modifier = Modifier.size(140.dp)
+                        ) {
+                            if (fotoPerfilPath != null) {
+                                    Image(
+                                        painter = rememberAsyncImagePainter(File(fotoPerfilPath)),
+                                        contentDescription = "Foto de perfil",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .size(200.dp)
+                                            .clip(CircleShape)
+                                    )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Filled.Person,
+                                    contentDescription = "Usuario"
+                                )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = "Usuario"
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Column {
-                        Text("Nombre del usuario")
-                        Text("Correo del usuario")
                     }
                 }
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 //Seleccion de genero
