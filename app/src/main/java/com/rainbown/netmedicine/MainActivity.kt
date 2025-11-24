@@ -24,6 +24,7 @@ import com.rainbown.netmedicine.ui.theme.NetMedicineTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -61,3 +62,4 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+

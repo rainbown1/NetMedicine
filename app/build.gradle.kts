@@ -40,7 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.accompanist.permissions)
     implementation(libs.volley)
+    implementation(libs.bundles.camerax)
     implementation(libs.hilt.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -61,6 +63,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidbrowserhelper)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

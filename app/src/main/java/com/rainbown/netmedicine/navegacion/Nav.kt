@@ -7,11 +7,15 @@ import androidx.compose.runtime.internal.composableLambda
 import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.runtime.remember
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.rainbown.netmedicine.View.Componentes.pantallacamara
 import com.rainbown.netmedicine.View.PantallaMedicosPorHospital
 import com.rainbown.netmedicine.View.hospitales
+import com.rainbown.netmedicine.View.pantallaServiciosInfo
 import com.rainbown.netmedicine.View.pantallaagendas
 import com.rainbown.netmedicine.View.pantallahospitales
 import com.rainbown.netmedicine.View.pantallainicial
@@ -30,7 +34,7 @@ fun Nav() {
     val context = LocalContext.current
     NavHost(
         navController = navController,
-        startDestination = ScreenNav.pantallainicial.route
+        startDestination = ScreenNav.pantallaprincipal.route
     ) {
         composable(route = ScreenNav.pantallainicial.route) {
             pantallainicial(navController)
@@ -60,11 +64,16 @@ fun Nav() {
        composable (route= ScreenNav.pantallarecetas.route){
            pantallarecetas(navController,context)
        }
-
-
+       composable(route = ScreenNav.pantallacamara.route) {
+           pantallacamara(navController)
+       }
 
         composable(route = ScreenNav.pantallaperfil.route) {
             pantallaperfil(navController)
+        }
+        composable(route = "servicios/{servicioId}") { backStackEntry ->
+            val servicioId = backStackEntry.arguments?.getString("servicioId")
+            pantallaServiciosInfo(navController,servicioId)
         }
     }
 }
