@@ -11,9 +11,12 @@ class RegistreeUsecase(
         apellido: String,
         correo: String,
         telefono: String,
-        contraseña: String
+        contraseña: String,
+        genero: String,
+        peso: String,
+        altura: String
     ): UserEntity? {
         println("UseCase: ejecutando registro con $nombre $apellido")
-        return repository.registre(nombre, apellido, correo, telefono, contraseña)
+        return repository.registre(nombre, apellido, correo, telefono, contraseña, genero, peso, altura)
     }
 }

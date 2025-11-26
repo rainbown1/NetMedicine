@@ -23,7 +23,10 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
         apellido: String,
         correo: String,
         telefono: String,
-        contraseña: String
+        contraseña: String,
+        genero: String,
+        peso: String,
+        altura: String
     ): UserEntity? = suspendCancellableCoroutine { continuation ->
 
         val url = "http://192.168.1.5/Api_NetMedicine/registro.php"
@@ -45,7 +48,10 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
                             apellido = apellido,
                             correo = correo,
                             telefono = telefono,
-                            contraseña = contraseña
+                            contraseña = contraseña,
+                            genero = genero,
+                            peso = peso,
+                            altura = altura
                         )
 
                         Toast.makeText(context, "Usuario registrado correctamente", Toast.LENGTH_LONG).show()
@@ -70,7 +76,10 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
                     "apellido" to apellido,
                     "telefono" to telefono,
                     "correo" to correo,
-                    "contraseña" to contraseña
+                    "contraseña" to contraseña,
+                    "genero" to genero,
+                    "peso" to peso,
+                    "altura" to altura
                 )
             }
         }
