@@ -36,9 +36,13 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
                                 correo = usuarioJson.getString("Correo"),
                                 telefono = usuarioJson.getString("Telefono"),
                                 contraseña = usuarioJson.getString("Contraseña"),
+
+
+
                                 genero = usuarioJson.getString("Genero"),
                                 peso = usuarioJson.getString("Peso"),
                                 altura = usuarioJson.getString("Altura")
+
                             )
 
                             continuation.resume(user)
