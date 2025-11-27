@@ -1,52 +1,62 @@
 package com.rainbown.netmedicine.Dataa
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.rainbown.netmedicine.domain.entity.UserEntity
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import kotlinx.coroutines.suspendCancellableCoroutine
+import org.json.JSONObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-// Data/repository/UserRepository.kt
-class UserRepository(private val prefs: SharedPreferences) {
+class UserRepository(private val context: Context) {
 
-    private companion object {
-        const val PREFS_USER_DATA = "user_data"
-        const val KEY_NOMBRE = "nombre"
-        const val KEY_APELLIDO = "apellido"
-        const val KEY_CORREO = "correo"
-        const val KEY_TELEFONO = "telefono"
-        const val KEY_GENERO = "genero"
-        const val KEY_PESO = "peso"
-        const val KEY_ALTURA = "altura"
-        const val KEY_FOTO_PERFIL = "foto_perfil"
-    }
+    suspend fun fetchUserByEmail(correo: String): UserEntity? =
+        suspendCancellableCoroutine { continuation ->
 
-    // Método para guardar usuario - DEBE ser público
-    fun saveUser(user: UserEntity) {
-        prefs.edit().apply {
-            putString(KEY_NOMBRE, user.nombre)
-            putString(KEY_APELLIDO, user.apellido)
-            putString(KEY_CORREO, user.correo)
-            putString(KEY_TELEFONO, user.telefono)
-            putString(KEY_GENERO, user.genero)
-            putString(KEY_PESO, user.peso)
-            putString(KEY_ALTURA, user.altura)
-            user.fotoPerfil?.let { putString(KEY_FOTO_PERFIL, it) }
-            apply()
+            val url = "http://192.168.1.13/Api_NetMedicine/GetUsuario.php"
+            val queue = Volley.newRequestQueue(context)
+
+            val request = object : StringRequest(
+                Method.POST, url,
+                { response ->
+                    try {
+                        val json = JSONObject(response)
+
+                        if (json.getBoolean("success")) {
+                            val u = json.getJSONObject("user")
+
+                            val user = UserEntity(
+                                id = u.getInt("idUsuario"),
+                                nombre = u.getString("Nombre"),
+                                apellido = u.getString("Apellido"),
+                                correo = u.getString("Correo"),
+                                telefono = u.getString("Telefono"),
+                                contraseña = u.getString("Contraseña"),
+                                genero = u.getString("genero"),
+                                peso = u.getString("peso"),
+                                altura = u.getString("altura")
+                            )
+
+                            continuation.resume(user)
+
+                        } else {
+                            continuation.resume(null)
+                        }
+
+                    } catch (e: Exception) {
+                        continuation.resumeWithException(e)
+                    }
+                },
+                { error ->
+                    continuation.resumeWithException(error)
+                }
+            ) {
+                override fun getParams(): MutableMap<String, String> =
+                    hashMapOf("Correo" to correo)
+            }
+
+            queue.add(request)
         }
-    }
-
-    // Método para obtener usuario
-    fun getUser(): UserEntity? {
-        val nombre = prefs.getString(KEY_NOMBRE, null) ?: return null
-        return UserEntity(
-            nombre = nombre,
-            apellido = prefs.getString(KEY_APELLIDO, "") ?: "",
-            correo = prefs.getString(KEY_CORREO, "") ?: "",
-            telefono = prefs.getString(KEY_TELEFONO, "") ?: "",
-            genero = prefs.getString(KEY_GENERO, "") ?: "",
-            peso = prefs.getString(KEY_PESO, "") ?: "",
-            altura = prefs.getString(KEY_ALTURA, "") ?: "",
-            fotoPerfil = prefs.getString(KEY_FOTO_PERFIL, null)
-        )
-    }
-
-    fun isUserLoggedIn(): Boolean = getUser() != null
 }
