@@ -18,7 +18,7 @@ class TareaRepositoryImpl(private val context: Context) : AgendRepository {
         onSuccess: (List<Tarea>) -> Unit,
         onError: (String) -> Unit
     ) {
-        val url = "http://192.168.1.5/Api_NetMedicine/agenda.php"
+        val url = "http://192.168.1.13Api_NetMedicine/agenda.php"
         val queue = Volley.newRequestQueue(context)
 
         val request = object : StringRequest(

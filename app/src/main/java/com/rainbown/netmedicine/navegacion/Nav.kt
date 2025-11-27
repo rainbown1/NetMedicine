@@ -34,7 +34,7 @@ fun Nav() {
     val context = LocalContext.current
     NavHost(
         navController = navController,
-        startDestination = ScreenNav.pantallaprincipal.route
+        startDestination = ScreenNav.pantallainicial.route
     ) {
         composable(route = ScreenNav.pantallainicial.route) {
             pantallainicial(navController)
