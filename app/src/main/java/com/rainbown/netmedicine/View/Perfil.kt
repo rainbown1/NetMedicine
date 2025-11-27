@@ -1,18 +1,14 @@
 package com.rainbown.netmedicine.View
 
-import android.Manifest
 import android.content.Context
-import android.view.ViewGroup
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.view.LifecycleCameraController
-import androidx.camera.view.PreviewView
+import android.widget.Space
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,225 +16,314 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Scale
+import androidx.compose.material.icons.filled.Height
+import androidx.compose.material.icons.filled.Male
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.rainbown.netmedicine.R
+import com.rainbown.netmedicine.Dataa.UserRepository
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
-import com.rainbown.netmedicine.View.Components.barra
+import com.rainbown.netmedicine.domain.entity.UserEntity
 import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
-import org.jetbrains.annotations.Async
+import com.rainbown.netmedicine.viewmodel.PerfilViewModel
+import com.rainbown.netmedicine.viewmodel.PerfilViewModelFactory
 import java.io.File
-import java.util.concurrent.Executor
+
 
 @Composable
-fun pantallaperfil(navController: NavController){
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        PerfilScreen(navController, modifier = Modifier.padding(innerPadding))
+fun pantallaperfil(navController: NavController) {
+    Scaffold(
+        modifier = Modifier,
+        bottomBar = {
+            Box(modifier = Modifier.padding(8.dp)) {
+                MyNavigationBar(navController)
+            }
+        }
+    ) { innerPadding ->
+        Perfil(modifier = Modifier.padding(innerPadding), navController)
     }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun PerfilScreen(navController: NavController, modifier: Modifier){
+fun Perfil(
+    modifier: Modifier,
+    navController: NavController
+) {
 
-    ConstraintLayout (modifier = Modifier.fillMaxSize() ){
+    val context = LocalContext.current
 
-        val (barra,img,content,menu) = createRefs()
-        val radioOptions = listOf("Hombre", "Mujer", "Otro")
-        val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
+    val userRepository = remember {
+        UserRepository(
+            context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        )
+    }
 
+    val viewModel: PerfilViewModel = viewModel(
+        factory = PerfilViewModelFactory(userRepository)
+    )
+
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val fotoPerfilPath = savedStateHandle?.get<String>("FOTO_PERFIL")
+    val userData by viewModel.userData.observeAsState()
+    val fotoPerfil by viewModel.fotoPerfil.observeAsState()
+
+    val currentUserData = userData ?: UserEntity(
+        nombre = "Milca Celeste",
+        apellido = "Nava De Dios",
+        correo = "2124100006@soy.utj.edu.mx",
+        telefono = "3321708076",
+        genero = "Mujer",
+        peso = "45 kg",
+        altura = "1.73"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        // Header
         Box(
-            modifier = Modifier.constrainAs(barra){
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-                end.linkTo(parent.end)
-            }
-        ){
-            barra("Perfil")
-        }
-
-        Box(modifier = Modifier.constrainAs(menu){
-            start.linkTo(parent.start)
-            bottom.linkTo(parent.bottom)
-            end.linkTo(parent.end)
-        }){
-            MyNavigationBar(navController)
-        }
-
-        Box(modifier = Modifier.fillMaxHeight().constrainAs(content){
-            top.linkTo(barra.bottom, margin = 20.dp)
-            start.linkTo(parent.start)
-        }){
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(onPrimaryContainerLight)
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Row {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(route = ScreenNav.pantallacamara.route)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = "Usuario"
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Column {
-                        Text("Nombre del usuario")
-                        Text("Correo del usuario")
-                    }
-                }
-                Spacer(modifier = Modifier.height(24.dp))
-
-                //Seleccion de genero
-                Text("Genero")
-                Row (modifier = Modifier.selectableGroup()
-                    .padding(15.dp)){
-                    radioOptions.forEach { text ->
-                        Row(
-                            Modifier
-                                .height(45.dp)
-                                .selectable(
-                                    selected = (text == selectedOption),
-                                    onClick = { onOptionSelected(text) },
-                                    role = Role.RadioButton
-                                )
-                                .padding(horizontal = 5.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = (text == selectedOption),
-                                onClick = null // null recommended for accessibility with screen readers
-                            )
-                            Text(
-                                text = text,
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(start = 16.dp),
-                                fontFamily = FontFamily.Serif,
-                                fontSize = 12.sp
-                            )
-                        }
-                    }
-                }
-
-                datosList.forEach {text ->
-                    Text(text.titulo)
-                    OutlinedTextField(
-                        state = rememberTextFieldState(),
-                        label =  { Text(
-                            text.label1,
-                            fontFamily = FontFamily.Serif,
-                            fontSize = 12.sp,
-                            color = Color.Black)}
-                    )
-                    OutlinedTextField(
-                        state = rememberTextFieldState(),
-                        label =  { Text(
-                            text.label2,
-                            fontFamily = FontFamily.Serif,
-                            fontSize = 12.sp,
-                            color = Color.Black)}
-                    )
-                }
-
-               Row (modifier = Modifier.padding(top = 10.dp)) {
-                   Button(
-                       onClick = { },
-                       colors = ButtonDefaults.buttonColors(
-                           containerColor = onPrimaryContainerLight,
-                           contentColor = Color.White
-                       )
-                   ) {
-                       Text("Guardar")
-                   }
-                   Spacer(modifier = Modifier.width(15.dp))
-                   OutlinedButton(
-                       onClick = { }
-                   ) {
-                       Text("Cerrar sesión")
-                   }
-               }
-
-                Spacer(modifier = Modifier.height(150.dp))
-                //Este boton no hace nada, solo esta para que funcione el scroll
-                Button(
-                    onClick = { },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = onPrimaryContainerLight,
-                        contentColor = Color.White
-                    )
+                // Foto de perfil
+                IconButton(
+                    onClick = {
+                        navController.navigate(route = ScreenNav.pantallacamara.route)
+                    },
+                    modifier = Modifier
+                        .size(120.dp)
+                        .shadow(8.dp, CircleShape)
+                        .border(4.dp, Color.White, CircleShape)
+                        .clip(CircleShape)
                 ) {
-                    Text("Guardar")
+                    val currentFoto = fotoPerfil ?: fotoPerfilPath
+                    if (currentFoto != null) {
+                        Image(
+                            painter = rememberAsyncImagePainter(File(currentFoto)),
+                            contentDescription = "Foto de perfil",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.surfaceVariant),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = "Usuario",
+                                modifier = Modifier.size(60.dp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "${currentUserData.nombre} ${currentUserData.apellido}",
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Serif,
+                    color = Color.White
+                )
+
+                Text(
+                    text = "${currentUserData.correo}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+        }
+
+        // Información del usuario
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            // Tarjeta de información personal
+            InfoCard(
+                title = "Información Personal",
+                items = listOf(
+                    InfoItem(Icons.Filled.Male, "Género", "${currentUserData.genero}"),
+                    InfoItem(Icons.Filled.Scale, "Peso", "${currentUserData.peso}"),
+                    InfoItem(Icons.Filled.Height, "Altura", "${currentUserData.altura}")
+                )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Tarjeta de contacto
+            InfoCard(
+                title = "Contacto",
+                items = listOf(
+                    InfoItem(Icons.Filled.Phone, "Teléfono", "${currentUserData.telefono}"),
+                    InfoItem(Icons.Filled.Email, "Email", "${currentUserData.correo}")
+                )
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Botón de editar
+            Button(
+                onClick = { navController.navigate(ScreenNav.pantallaeditarperfil.route) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = onPrimaryContainerLight,
+                    contentColor = Color.White
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Editar",
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Editar Perfil",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedButton(
+                onClick = { },
+                modifier = Modifier.height(50.dp)
+            ) {
+                Text("Fin de la pagina")
+            }
+        }
+    }
+}
+
+@Composable
+fun InfoCard(title: String, items: List<InfoItem>) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(4.dp, RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            items.forEach { item ->
+                InfoRow(icon = item.icon, label = item.label, value = item.value)
+                if (item != items.last()) {
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         }
-        Box(modifier = Modifier.constrainAs(menu){
-            start.linkTo(parent.start)
-            bottom.linkTo(parent.bottom)
-            end.linkTo(parent.end)
-        }){
-            MyNavigationBar(navController)
-        }
-
     }
+}
 
+@Composable
+fun InfoRow(icon: ImageVector, label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
 }
 
 
-val datosList = listOf<Datos>(
-    Datos("Nombre", "Nombre", "Apellidos"),
-    Datos("Contacto","Numero de telefono", "Correo electronico"),
-    Datos("Datos personales","Peso", "Altura"),
 
+data class InfoItem(
+    val icon: ImageVector,
+    val label: String,
+    val value: String
 )
-data class Datos(
-    val titulo: String,
-    val label1: String,
-    val label2: String
-)
-
-

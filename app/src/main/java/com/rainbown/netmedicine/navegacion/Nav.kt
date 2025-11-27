@@ -2,24 +2,20 @@ package com.rainbown.netmedicine.navegacion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.internal.composableLambda
 
 import androidx.compose.ui.platform.LocalContext
 
-import androidx.compose.runtime.remember
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.rainbown.netmedicine.View.Componentes.pantallacamara
 import com.rainbown.netmedicine.View.PantallaMedicosPorHospital
-import com.rainbown.netmedicine.View.hospitales
 import com.rainbown.netmedicine.View.pantallaServiciosInfo
 import com.rainbown.netmedicine.View.pantallaagendas
 import com.rainbown.netmedicine.View.pantallahospitales
 import com.rainbown.netmedicine.View.pantallainicial
 import com.rainbown.netmedicine.View.pantallalogin
+import com.rainbown.netmedicine.View.pantallaeditarperfil
 import com.rainbown.netmedicine.View.pantallaperfil
 import com.rainbown.netmedicine.View.pantallaprincipal
 import com.rainbown.netmedicine.View.pantallarecetas
@@ -71,9 +67,13 @@ fun Nav() {
         composable(route = ScreenNav.pantallaperfil.route) {
             pantallaperfil(navController)
         }
+
         composable(route = "servicios/{servicioId}") { backStackEntry ->
             val servicioId = backStackEntry.arguments?.getString("servicioId")
             pantallaServiciosInfo(navController,servicioId)
+        }
+        composable(route = ScreenNav.pantallaeditarperfil.route) {
+            pantallaeditarperfil(navController)
         }
     }
 }

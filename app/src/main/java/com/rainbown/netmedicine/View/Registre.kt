@@ -1,15 +1,22 @@
 package com.rainbown.netmedicine.View
 
 import android.content.Context
+import android.widget.Space
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +40,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.Dataa.AuthRepositoryimplRegistree
+import com.rainbown.netmedicine.Dataa.UserRepository
 import com.rainbown.netmedicine.Domainn.usecase.RegistreeUsecase
 
 
@@ -50,8 +59,12 @@ import com.rainbown.netmedicine.viewmodel.RegistroVmFactory
 fun pantallaregistro(navController: NavController, context: Context){
     val repository = AuthRepositoryimplRegistree(context)
     val registreUsecase = RegistreeUsecase(repository)
+    val sharedPreferences = remember {
+        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    }
+    val userRepository = remember { UserRepository(sharedPreferences) }
     val viewModel: RegistroVm = viewModel(
-        factory = RegistroVmFactory(registreUsecase)
+        factory = RegistroVmFactory(registreUsecase,userRepository)
     )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -82,9 +95,12 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
         val Telvm: String by viewModel.tel.observeAsState(initial ="")
         val mailvm: String by viewModel.email.observeAsState(initial ="")
         val passwordvm: String by viewModel.password.observeAsState(initial ="")
+        val generovm: String by viewModel.genero.observeAsState("")
+        val pesovm: String by viewModel.peso.observeAsState("")
+        val alturavm: String by viewModel.altura.observeAsState("")
 
 
-        val (nameField, apField, telField, emailField, passwordField, loginButton,registerButton) = createRefs()
+        val (info, loginButton,registerButton) = createRefs()
         val (boxUser) = createRefs()
 
         Box(modifier = Modifier.constrainAs(boxUser){
@@ -101,181 +117,208 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             )
         }
 
-        Box(modifier = Modifier.constrainAs(nameField) {
-            top.linkTo(parent.top, margin = 250.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = namevm,
-                onValueChange = { newName ->
-                    viewModel.nombre.value = newName
-                },
-                label = { Text("Nombre",
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-            )
-        }
-
-        Box(modifier = Modifier.constrainAs(apField) {
-            top.linkTo(nameField.bottom, margin = 25.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = lastnamevm,
-                onValueChange = { newLastname ->
-                    viewModel.lastName.value = newLastname
-                },
-                label = { Text("Apellido",
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-            )
-        }
-
-        Box(modifier = Modifier.constrainAs(telField) {
-            top.linkTo(apField.bottom, margin = 25.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = Telvm,
-                onValueChange = { Newtel ->
-                    viewModel.tel.value = Newtel
-                },
-                label = { Text("Teléfono",
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-            )
-        }
-
-        Box(modifier = Modifier.constrainAs(emailField) {
-            top.linkTo(telField.bottom, margin = 25.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = mailvm,
-                onValueChange = { Newmail->
-                    viewModel.email.value = Newmail
-                },
-                label = { Text("Correo electrónico",
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
-        }
-
-        Box(modifier = Modifier.constrainAs(passwordField) {
-            top.linkTo(emailField.bottom, margin = 25.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }) {
-            OutlinedTextField(
-                value = passwordvm,
-                onValueChange = {NewPass ->
-                    viewModel.password.value = NewPass
-                },
-                label = { Text("Contraseña",
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.W400,
-                    style = AppTypography.labelLarge) },
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp),
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-            )
-        }
         // botenes de abajoo
 
         Box(modifier = Modifier.constrainAs(loginButton) {
-            top.linkTo(passwordField.bottom, margin = 45.dp)
+            top.linkTo(info.bottom)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
 
-            Button(
-                onClick = {
-                    viewModel.onRegistroClicked()
-                },
+           Column {
+               Button(
+                   onClick = {
+                       viewModel.onRegistroClicked()
+                   },
 
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryLight
-                ),
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp)
-            ) {
-                Text("Iniciar Sesion",
-                    color = inverseSurfaceLightMediumContrast,
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.W500,
-                    style = AppTypography.labelLarge)
-            }
+                   colors = ButtonDefaults.buttonColors(
+                       containerColor = primaryLight
+                   ),
+                   modifier = Modifier
+                       .width(330.dp)
+                       .height(55.dp)
+               ) {
+                   Text("Iniciar Sesion",
+                       color = inverseSurfaceLightMediumContrast,
+                       fontFamily = FontFamily.Serif,
+                       letterSpacing = 1.2.sp,
+                       fontSize = 16.sp,
+                       fontWeight = FontWeight.W500,
+                       style = AppTypography.labelLarge)
+               }
+
+               Spacer(modifier = Modifier.height(20.dp))
+
+               OutlinedButton(
+                   onClick = {
+                       navController.navigate(route = ScreenNav.pantallainicial.route)
+                   },
+                   modifier = Modifier
+                       .width(330.dp)
+                       .height(55.dp)
+               ) {
+                   Text(
+                       "Regresar al Inicio",
+                       color = onPrimaryContainerLight,
+                       fontFamily = FontFamily.Serif,
+                       letterSpacing = 1.2.sp,
+                       fontSize = 17.sp,
+                       fontWeight = FontWeight.W700,
+                       style = AppTypography.labelLarge
+                   )
+               }
+           }
         }
 
-        Box(modifier = Modifier.constrainAs(registerButton) {
-            top.linkTo(loginButton.bottom, margin = 25.dp)
+        Box(modifier = Modifier.constrainAs(info){
             start.linkTo(parent.start)
+            top.linkTo(boxUser.bottom, margin = 10.dp)
             end.linkTo(parent.end)
-        }) {
-            Button(
-                onClick = {
-                    navController.navigate(route = ScreenNav.pantallainicial.route)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp)
-            ) {
-                Text(
-                    "Regresar al Inicio",
-                    color = onPrimaryContainerLight,
-                    fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.W700,
-                    style = AppTypography.labelLarge
-                    )
+        }){
+            Column (modifier = Modifier.verticalScroll(rememberScrollState())) {
+
+
+                OutlinedTextField(
+                    value = namevm,
+                    onValueChange = { newName ->
+                        viewModel.nombre.value = newName
+                    },
+                    label = { Text("Nombre",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                OutlinedTextField(
+                    value = lastnamevm,
+                    onValueChange = { newLastname ->
+                        viewModel.lastName.value = newLastname
+                    },
+                    label = { Text("Apellido",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                OutlinedTextField(
+                    value = Telvm,
+                    onValueChange = { Newtel ->
+                        viewModel.tel.value = Newtel
+                    },
+                    label = { Text("Teléfono",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                )
+                OutlinedTextField(
+                    value = generovm,
+                    onValueChange = { newGenero ->
+                        viewModel.genero.value = newGenero
+                    },
+                    label = { Text("Genero",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                OutlinedTextField(
+                    value = pesovm,
+                    onValueChange = { newPeso ->
+                        viewModel.peso.value = newPeso
+                    },
+                    label = { Text("Peso",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                OutlinedTextField(
+                    value = alturavm,
+                    onValueChange = { newAltura ->
+                        viewModel.altura.value = newAltura
+                    },
+                    label = { Text("Altura",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                )
+                OutlinedTextField(
+                    value = mailvm,
+                    onValueChange = { Newmail->
+                        viewModel.email.value = Newmail
+                    },
+                    label = { Text("Correo electrónico",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                )
+                OutlinedTextField(
+                    value = passwordvm,
+                    onValueChange = {NewPass ->
+                        viewModel.password.value = NewPass
+                    },
+                    label = { Text("Contraseña",
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W400,
+                        style = AppTypography.labelLarge) },
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                )
             }
         }
+
+
+
+        Spacer(modifier = Modifier.width(15.dp))
     }
 }

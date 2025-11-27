@@ -1,7 +1,10 @@
 package com.rainbown.netmedicine.View.Componentes
 
 import android.Manifest
+import android.content.Context
+import android.os.Environment
 import android.view.ViewGroup
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.LifecycleCameraController
@@ -13,7 +16,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -38,11 +44,13 @@ fun pantallacamara(navController: NavController){
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Camara(navController: NavController, modifier: Modifier){
-    val context = LocalContext.current
+    var context = LocalContext.current
     val cameraController = remember {
         LifecycleCameraController(context)
     }
     val lifecycle = LocalLifecycleOwner.current
+    cameraController.cameraSelector =
+        CameraSelector.DEFAULT_FRONT_CAMERA
 
     val permissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     LaunchedEffect(Unit) {
@@ -52,7 +60,14 @@ fun Camara(navController: NavController, modifier: Modifier){
         val boton = createRefs()
         Scaffold (modifier = Modifier.fillMaxSize(), floatingActionButton = {
             FloatingActionButton(
-                onClick = { takePicture(cameraController = cameraController, ContextCompat.getMainExecutor(context)) },
+                onClick = {
+                    takePicture(
+                        cameraController = cameraController,
+                        executor = ContextCompat.getMainExecutor(context),
+                        context = context,
+                        navController = navController
+                    )
+                },
             ) {
                 Text("Camara!")
             }
@@ -72,6 +87,8 @@ fun CameraComposable(
     cameraController: LifecycleCameraController,
     lifecycle: LifecycleOwner
 ){
+
+
     cameraController.bindToLifecycle(lifecycle)
     ConstraintLayout {
         val (previewRef, buttonRef) = createRefs()
@@ -99,8 +116,27 @@ fun CameraComposable(
     }
 }
 
-private fun takePicture(cameraController: LifecycleCameraController, executor: Executor) {
-    val file = File.createTempFile("imagentest", ".jpg")
+private fun takePicture(
+    cameraController: LifecycleCameraController,
+    executor: Executor,
+    context: Context,
+    navController: NavController
+) {
+
+    // Carpeta pública de fotos
+    val directory = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+        "NetMedicine"
+    )
+
+    // Crear carpeta si no existe
+    if (!directory.exists()) {
+        directory.mkdirs()
+    }
+
+    // Archivo final donde se guardará la foto
+    val file = File(directory, "foto_perfil.jpg")
+
     val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
     cameraController.takePicture(
@@ -108,7 +144,11 @@ private fun takePicture(cameraController: LifecycleCameraController, executor: E
         executor,
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                println("Imagen guardada en: ${file.absolutePath}")
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("FOTO_PERFIL", file.absolutePath)
+
+                navController.popBackStack()
             }
 
             override fun onError(exception: ImageCaptureException) {

@@ -12,4 +12,5 @@ sealed class ScreenNav(val route: String) {
  object PantallaMedicosPorHospital: ScreenNav("pantalla_medicos")
  object pantallaperfil: ScreenNav("pantalla_perfil")
  object pantallacamara: ScreenNav("pantalla-camara")
+ object pantallaeditarperfil: ScreenNav("pantalla-editar-perfil")
 }
