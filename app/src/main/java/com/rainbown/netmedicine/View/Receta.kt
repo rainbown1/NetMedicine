@@ -103,7 +103,7 @@ fun RecetaScreen(
         Box(
             modifier = Modifier.constrainAs(content) {
                 start.linkTo(parent.start)
-                top.linkTo(barraTop.bottom)
+                top.linkTo(barraTop.bottom, margin = 250.dp)
                 end.linkTo(parent.end)
                 bottom.linkTo(menu.top)
             }

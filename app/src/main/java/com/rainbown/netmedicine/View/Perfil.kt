@@ -221,10 +221,12 @@ fun Perfil(
             Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = ScreenNav.pantallainicial.route)
+                },
                 modifier = Modifier.height(50.dp)
             ) {
-                Text("Fin de la pagina")
+                Text("Cerrar Sesion")
             }
         }
     }
