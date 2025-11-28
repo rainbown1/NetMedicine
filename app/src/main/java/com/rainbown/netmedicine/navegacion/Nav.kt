@@ -39,7 +39,7 @@ fun Nav() {
             pantallalogin(navController)
         }
         composable ( route= ScreenNav.pantallaregistro.route ){
-            pantallaregistro(navController, context = context )
+            pantallaregistro(navController,context)
         }
         composable ( route= ScreenNav.pantallaprincipal.route ){
             pantallaprincipal(navController)
@@ -53,7 +53,7 @@ fun Nav() {
         composable (route = ScreenNav.pantallahospitales.route){
             pantallahospitales(navController)
         }
-        composable(route= "medicos/{hospitalId}") { backStackEntry ->
+        composable("medicos/{hospitalId}") { backStackEntry ->
             val hospitalId = backStackEntry.arguments?.getString("hospitalId")
             PantallaMedicosPorHospital(navController, hospitalId)
         }

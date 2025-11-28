@@ -1,9 +1,7 @@
 package com.rainbown.netmedicine.View
 
 import android.content.Context
-import android.widget.Space
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +37,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.Dataa.AuthRepositoryimplRegistree
-import com.rainbown.netmedicine.Dataa.UserRepository
 import com.rainbown.netmedicine.Domainn.usecase.RegistreeUsecase
 
 
@@ -59,12 +55,8 @@ import com.rainbown.netmedicine.viewmodel.RegistroVmFactory
 fun pantallaregistro(navController: NavController, context: Context){
     val repository = AuthRepositoryimplRegistree(context)
     val registreUsecase = RegistreeUsecase(repository)
-    val sharedPreferences = remember {
-        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-    }
-    val userRepository = remember { UserRepository(sharedPreferences) }
     val viewModel: RegistroVm = viewModel(
-        factory = RegistroVmFactory(registreUsecase,userRepository)
+        factory = RegistroVmFactory(registreUsecase)
     )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -125,49 +117,49 @@ fun Registro(navController: NavController,viewModel: RegistroVm) {
             end.linkTo(parent.end)
         }) {
 
-           Column {
-               Button(
-                   onClick = {
-                       viewModel.onRegistroClicked()
-                   },
+            Column {
+                Button(
+                    onClick = {
+                        viewModel.onRegistroClicked()
+                    },
 
-                   colors = ButtonDefaults.buttonColors(
-                       containerColor = primaryLight
-                   ),
-                   modifier = Modifier
-                       .width(330.dp)
-                       .height(55.dp)
-               ) {
-                   Text("Iniciar Sesion",
-                       color = inverseSurfaceLightMediumContrast,
-                       fontFamily = FontFamily.Serif,
-                       letterSpacing = 1.2.sp,
-                       fontSize = 16.sp,
-                       fontWeight = FontWeight.W500,
-                       style = AppTypography.labelLarge)
-               }
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = primaryLight
+                    ),
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp)
+                ) {
+                    Text("Iniciar Sesion",
+                        color = inverseSurfaceLightMediumContrast,
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.W500,
+                        style = AppTypography.labelLarge)
+                }
 
-               Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-               OutlinedButton(
-                   onClick = {
-                       navController.navigate(route = ScreenNav.pantallainicial.route)
-                   },
-                   modifier = Modifier
-                       .width(330.dp)
-                       .height(55.dp)
-               ) {
-                   Text(
-                       "Regresar al Inicio",
-                       color = onPrimaryContainerLight,
-                       fontFamily = FontFamily.Serif,
-                       letterSpacing = 1.2.sp,
-                       fontSize = 17.sp,
-                       fontWeight = FontWeight.W700,
-                       style = AppTypography.labelLarge
-                   )
-               }
-           }
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate(route = ScreenNav.pantallainicial.route)
+                    },
+                    modifier = Modifier
+                        .width(330.dp)
+                        .height(55.dp)
+                ) {
+                    Text(
+                        "Regresar al Inicio",
+                        color = onPrimaryContainerLight,
+                        fontFamily = FontFamily.Serif,
+                        letterSpacing = 1.2.sp,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.W700,
+                        style = AppTypography.labelLarge
+                    )
+                }
+            }
         }
 
         Box(modifier = Modifier.constrainAs(info){

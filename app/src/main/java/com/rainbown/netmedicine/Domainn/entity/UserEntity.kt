@@ -1,6 +1,5 @@
 package com.rainbown.netmedicine.domain.entity
 
-import com.rainbown.netmedicine.viewmodel.PerfilViewModel
 
 data class UserEntity(
     val id: Int? = null,
