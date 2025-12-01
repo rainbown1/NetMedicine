@@ -1,51 +1,24 @@
 package com.rainbown.netmedicine.View
 
+import PerfilViewModel
 import android.content.Context
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Scale
-import androidx.compose.material.icons.filled.Height
-import androidx.compose.material.icons.filled.Male
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -54,20 +27,17 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.rainbown.netmedicine.Dataa.UserRepository
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.domain.entity.UserEntity
 import com.rainbown.netmedicine.navegacion.ScreenNav
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
-import com.rainbown.netmedicine.viewmodel.PerfilViewModel
 import com.rainbown.netmedicine.viewmodel.PerfilViewModelFactory
+import kotlinx.coroutines.launch
 import java.io.File
-
 
 @Composable
 fun pantallaperfil(navController: NavController) {
@@ -79,50 +49,63 @@ fun pantallaperfil(navController: NavController) {
             }
         }
     ) { innerPadding ->
-        Perfil(modifier = Modifier.padding(innerPadding), navController)
+        Perfil(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController
+        )
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Perfil(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     navController: NavController
 ) {
-
     val context = LocalContext.current
 
-    val userRepository = remember {
-        UserRepository(
-            context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        )
-    }
-
     val viewModel: PerfilViewModel = viewModel(
-        factory = PerfilViewModelFactory(userRepository)
+        factory = PerfilViewModelFactory(UserRepository(context))
     )
 
-    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
-    val fotoPerfilPath = savedStateHandle?.get<String>("FOTO_PERFIL")
     val userData by viewModel.userData.observeAsState()
     val fotoPerfil by viewModel.fotoPerfil.observeAsState()
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val fotoPerfilPath = savedStateHandle?.get<String>("FOTO_PERFIL")
 
-    val currentUserData = userData ?: UserEntity(
-        nombre = "Milca Celeste",
-        apellido = "Nava De Dios",
-        correo = "2124100006@soy.utj.edu.mx",
-        telefono = "3321708076",
-        genero = "Mujer",
-        peso = "45 kg",
-        altura = "1.73"
-    )
+
+
+    LaunchedEffect(Unit) {
+        val sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val correoUsuario = sharedPref.getString("correo", null)
+
+        if (correoUsuario != null) {
+            println("Cargando perfil para $correoUsuario")
+            viewModel.loadUserByEmail(correoUsuario)
+        } else {
+            println("No se encontró correo guardado")
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        // Header
+
+
+        if (userData == null) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            return
+        }
+
+        val currentUser = userData!!
+
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -153,9 +136,7 @@ fun Perfil(
                             painter = rememberAsyncImagePainter(File(currentFoto)),
                             contentDescription = "Foto de perfil",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape)
+                            modifier = Modifier.fillMaxSize()
                         )
                     } else {
                         Box(
@@ -177,14 +158,14 @@ fun Perfil(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "${currentUserData.nombre} ${currentUserData.apellido}",
+                    text = "${currentUser.nombre} ${currentUser.apellido}",
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Serif,
                     color = Color.White
                 )
 
                 Text(
-                    text = "${currentUserData.correo}",
+                    text = currentUser.correo,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.8f)
                 )
@@ -193,36 +174,30 @@ fun Perfil(
             }
         }
 
-        // Información del usuario
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            // Tarjeta de información personal
+        // INFORMACIÓN PERSONAL
+        Column(modifier = Modifier.padding(16.dp)) {
+
             InfoCard(
                 title = "Información Personal",
                 items = listOf(
-                    InfoItem(Icons.Filled.Male, "Género", "${currentUserData.genero}"),
-                    InfoItem(Icons.Filled.Scale, "Peso", "${currentUserData.peso}"),
-                    InfoItem(Icons.Filled.Height, "Altura", "${currentUserData.altura}")
+                    InfoItem(Icons.Filled.Male, "Género", currentUser.genero),
+                    InfoItem(Icons.Filled.Scale, "Peso", currentUser.peso),
+                    InfoItem(Icons.Filled.Height, "Altura", currentUser.altura)
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Tarjeta de contacto
             InfoCard(
                 title = "Contacto",
                 items = listOf(
-                    InfoItem(Icons.Filled.Phone, "Teléfono", "${currentUserData.telefono}"),
-                    InfoItem(Icons.Filled.Email, "Email", "${currentUserData.correo}")
+                    InfoItem(Icons.Filled.Phone, "Teléfono", currentUser.telefono),
+                    InfoItem(Icons.Filled.Email, "Email", currentUser.correo)
                 )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botón de editar
             Button(
                 onClick = { navController.navigate(ScreenNav.pantallaeditarperfil.route) },
                 modifier = Modifier
@@ -234,11 +209,7 @@ fun Perfil(
                     contentColor = Color.White
                 )
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "Editar",
-                    modifier = Modifier.size(20.dp)
-                )
+                Icon(Icons.Filled.Edit, contentDescription = "Editar", modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Editar Perfil",
@@ -246,12 +217,16 @@ fun Perfil(
                     fontWeight = FontWeight.Medium
                 )
             }
+
             Spacer(modifier = Modifier.height(10.dp))
+
             OutlinedButton(
-                onClick = { },
+                onClick = {
+                    navController.navigate(route = ScreenNav.pantallainicial.route)
+                },
                 modifier = Modifier.height(50.dp)
             ) {
-                Text("Fin de la pagina")
+                Text("Cerrar Sesion")
             }
         }
     }
@@ -268,9 +243,8 @@ fun InfoCard(title: String, items: List<InfoItem>) {
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,
@@ -280,10 +254,8 @@ fun InfoCard(title: String, items: List<InfoItem>) {
             )
 
             items.forEach { item ->
-                InfoRow(icon = item.icon, label = item.label, value = item.value)
-                if (item != items.last()) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
+                InfoRow(item.icon, item.label, item.value)
+                if (item != items.last()) Spacer(modifier = Modifier.height(12.dp))
             }
         }
     }
@@ -302,9 +274,7 @@ fun InfoRow(icon: ImageVector, label: String, value: String) {
             tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
+        Column(Modifier.weight(1f)) {
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,
@@ -313,14 +283,11 @@ fun InfoRow(icon: ImageVector, label: String, value: String) {
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface
+                fontWeight = FontWeight.Medium
             )
         }
     }
 }
-
-
 
 data class InfoItem(
     val icon: ImageVector,

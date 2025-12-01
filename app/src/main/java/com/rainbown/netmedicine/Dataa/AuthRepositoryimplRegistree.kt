@@ -26,7 +26,7 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
         contraseña: String,
         genero: String,
         peso: String,
-        altura: String
+        altura:String
     ): UserEntity? = suspendCancellableCoroutine { continuation ->
 
         val url = "http://192.168.1.13/Api_NetMedicine/registro.php"
@@ -51,7 +51,7 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
                             contraseña = contraseña,
                             genero = genero,
                             peso = peso,
-                            altura = altura
+                            altura = altura,
                         )
 
                         Toast.makeText(context, "Usuario registrado correctamente", Toast.LENGTH_LONG).show()
@@ -72,14 +72,14 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
         ) {
             override fun getParams(): MutableMap<String, String> {
                 return hashMapOf(
-                    "nombre" to nombre,
-                    "apellido" to apellido,
-                    "telefono" to telefono,
-                    "correo" to correo,
-                    "contraseña" to contraseña,
-                    "genero" to genero,
-                    "peso" to peso,
-                    "altura" to altura
+                    "Nombre" to nombre,
+                    "Apellido" to apellido,
+                    "Telefono" to telefono,
+                    "Correo" to correo,
+                    "Contraseña" to contraseña,
+                    "Genero" to genero,
+                    "Peso" to peso,
+                    "Altura" to altura
                 )
             }
         }
