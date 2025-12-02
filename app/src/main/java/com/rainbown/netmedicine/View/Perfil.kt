@@ -199,7 +199,7 @@ fun Perfil(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { navController.navigate(ScreenNav.pantallaeditarperfil.route) },
+                onClick = { navController.navigate(route = ScreenNav.pantallainicial.route) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -209,10 +209,10 @@ fun Perfil(
                     contentColor = Color.White
                 )
             ) {
-                Icon(Icons.Filled.Edit, contentDescription = "Editar", modifier = Modifier.size(20.dp))
+
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Editar Perfil",
+                    text = "Cerrar Sesión",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -220,14 +220,7 @@ fun Perfil(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            OutlinedButton(
-                onClick = {
-                    navController.navigate(route = ScreenNav.pantallainicial.route)
-                },
-                modifier = Modifier.height(50.dp)
-            ) {
-                Text("Cerrar Sesion")
-            }
+
         }
     }
 }

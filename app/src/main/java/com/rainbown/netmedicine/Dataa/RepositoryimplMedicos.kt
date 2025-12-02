@@ -10,7 +10,7 @@ import org.json.JSONObject
 
 class RepositoryimplMedicos(private val context: Context) : MedicosRepository {
 
-    private val url = "http://192.168.1.11/Api_NetMedicine/medicos.php"
+    private val url = "http://172.16.100.122/Api_NetMedicine/medicos.php"
 
     override fun obtenerMedicos(
         callback: (List<MedicoEntity>) -> Unit,
@@ -36,7 +36,7 @@ class RepositoryimplMedicos(private val context: Context) : MedicosRepository {
                                     nombre = o.getString("Nombre"),
                                     especialidad = o.getString("Especialidad"),
                                     idHospital = o.getString("idHospital"),
-                                    contacto = o.getString("Contacto")
+                                    contacto = o.getString("Telefono")
                                 )
                             )
                         }

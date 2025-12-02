@@ -77,11 +77,11 @@ fun Hospitales(modifier: Modifier, navController: NavController){
 }
 
 val hospitales = listOf(
-    Hospital("H1", "Hospital 1", "Hospital privado", "Av. falsa calle falsa #1234"),
-    Hospital("H2", "Hospital 2", "Hospital general", "Av. falsa calle falsa #1234"),
-    Hospital("H3", "Hospital 3", "Hospital privado", "Av. falsa calle falsa #1234"),
-    Hospital("H4", "Hospital 4", "Hospital general", "Av. falsa calle falsa #1234"),
-    Hospital("H5", "Hospital 5", "Hospital general", "Av. falsa calle falsa #1234"),
+    Hospital("1", "Hospital 1", "Hospital privado", "Av. falsa calle falsa #1234"),
+    Hospital("2", "Hospital 2", "Hospital general", "Av. falsa calle falsa #1234"),
+    Hospital("3", "Hospital 3", "Hospital privado", "Av. falsa calle falsa #1234"),
+    Hospital("4", "Hospital 4", "Hospital general", "Av. falsa calle falsa #1234"),
+    Hospital("5", "Hospital 5", "Hospital general", "Av. falsa calle falsa #1234"),
 )
 
 @Composable
