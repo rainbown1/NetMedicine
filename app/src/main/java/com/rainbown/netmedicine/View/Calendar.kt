@@ -30,12 +30,11 @@ import com.rainbown.netmedicine.Domainn.entity.Tarea
 import com.rainbown.netmedicine.Domainn.entity.TipoTarea
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
-import com.rainbown.netmedicine.navegacion.ScreenNav
-import com.rainbown.netmedicine.viewmodel.CalendarViewModel
-import com.rainbown.netmedicine.viewmodel.CalendarVMFactory
 import com.rainbown.netmedicine.ui.theme.onPrimaryContainerLight
 import com.rainbown.netmedicine.ui.theme.outlineLight
 import com.rainbown.netmedicine.ui.theme.primaryLight
+import com.rainbown.netmedicine.viewmodel.CalendarViewModel
+import com.rainbown.netmedicine.viewmodel.CalendarVMFactory
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -48,9 +47,6 @@ fun pantallaagendas(navController: NavController) {
         )
     }
 }
-
-// Modelo de datos visual (usa los datos del servidor)
-
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -72,23 +68,22 @@ fun CalendarWithTasks(
             selectedDateMillis?.let { formatDateToCalendar(it) } ?: ""
         }
 
+
         LaunchedEffect(Unit) {
             val sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-            val correoUsuario = sharedPref.getString("correo", null)
+            val idUsuario = sharedPref.getInt("id_usuario", -1)
 
-            if (correoUsuario != null) {
-                println("Cargando tareas para $correoUsuario")
-                viewModel.loadTareas(correoUsuario)
+            if (idUsuario != -1) {
+                println("Cargando tareas para usuario ID = $idUsuario")
+                viewModel.loadTareas(idUsuario)
             } else {
-                println("No se encontró correo guardado")
+                println("No se encontró id_usuario guardado")
             }
         }
 
-
-
         val datePickerState = rememberDatePickerState()
 
-        // Barra superior
+
         Box(
             modifier = Modifier.constrainAs(barra) {
                 start.linkTo(parent.start)
@@ -99,7 +94,7 @@ fun CalendarWithTasks(
             barra("Agenda")
         }
 
-        // Botón calendario
+
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -150,7 +145,7 @@ fun CalendarWithTasks(
             MyNavigationBar(navController)
         }
 
-        // Lista de tareas
+
         Box(modifier = Modifier.constrainAs(tasksB) {
             start.linkTo(parent.start)
             bottom.linkTo(menu.top)
@@ -165,7 +160,7 @@ fun CalendarWithTasks(
             )
         }
 
-        // Selector de fecha
+
         if (showCalendar) {
             DatePickerDialog(
                 onDismissRequest = { showCalendar = false },
@@ -285,14 +280,12 @@ fun TaskItem(tarea: Tarea) {
     }
 }
 
-
 fun getTaskColor(tipo: TipoTarea): Color = when (tipo) {
     TipoTarea.MEDICAMENTO -> Color(0xFF4CAF50)
     TipoTarea.CONSULTA -> Color(0xFF2196F3)
     TipoTarea.EXAMEN -> Color(0xFFFF9800)
     TipoTarea.RECORDATORIO -> Color(0xFF9C27B0)
 }
-
 
 @RequiresApi(Build.VERSION_CODES.N)
 fun formatDateToCalendar(millis: Long): String =

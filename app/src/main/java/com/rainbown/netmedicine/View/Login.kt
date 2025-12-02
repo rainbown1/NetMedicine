@@ -1,16 +1,9 @@
 package com.rainbown.netmedicine.View
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -43,11 +36,10 @@ fun pantallalogin(navController: NavController) {
     val repository = AuthRepositoryImpl(context)
     val loginUseCase = LoginUsecase(repository)
 
+    val viewModel: LoginVM =
+        viewModel(factory = LoginVM.LoginVMFactory(loginUseCase, context))
 
-    val viewModel: LoginVM = viewModel(factory = LoginVM.LoginVMFactory(loginUseCase, context))
-
-
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
         Login(navController, viewModel)
     }
 }
@@ -88,11 +80,10 @@ fun Login(navController: NavController, viewModel: LoginVM) {
             Image(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = "Logo",
-                modifier = Modifier
-                    .width(200.dp)
-                    .height(180.dp)
+                modifier = Modifier.width(200.dp).height(180.dp)
             )
         }
+
 
         Box(modifier = Modifier.constrainAs(emailField) {
             top.linkTo(parent.top, margin = 260.dp)
@@ -106,19 +97,18 @@ fun Login(navController: NavController, viewModel: LoginVM) {
                     Text(
                         "Correo electrónico",
                         fontFamily = FontFamily.Serif,
-                        letterSpacing = 1.2.sp,
+                        letterSpacing = 1.sp,
                         fontSize = 17.sp,
                         textDecoration = TextDecoration.Underline,
                         fontWeight = FontWeight.W400,
                         style = AppTypography.labelLarge
                     )
                 },
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(60.dp),
+                modifier = Modifier.width(330.dp).height(60.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
         }
+
 
         Box(modifier = Modifier.constrainAs(passwordField) {
             top.linkTo(emailField.bottom, margin = 25.dp)
@@ -132,20 +122,19 @@ fun Login(navController: NavController, viewModel: LoginVM) {
                     Text(
                         "Contraseña",
                         fontFamily = FontFamily.Serif,
-                        letterSpacing = 1.2.sp,
+                        letterSpacing = 1.sp,
                         fontSize = 17.sp,
                         textDecoration = TextDecoration.Underline,
                         fontWeight = FontWeight.W400,
                         style = AppTypography.labelLarge
                     )
                 },
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(60.dp),
+                modifier = Modifier.width(330.dp).height(60.dp),
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
         }
+
 
         Box(modifier = Modifier.constrainAs(loginButton) {
             top.linkTo(passwordField.bottom, margin = 50.dp)
@@ -155,15 +144,12 @@ fun Login(navController: NavController, viewModel: LoginVM) {
             Button(
                 onClick = { viewModel.onLoginSelected() },
                 colors = ButtonDefaults.buttonColors(containerColor = primaryLight),
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp)
+                modifier = Modifier.width(330.dp).height(55.dp)
             ) {
                 Text(
                     "Iniciar Sesión",
                     color = inverseSurfaceLightMediumContrast,
                     fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W500,
                     style = AppTypography.labelLarge
@@ -171,25 +157,22 @@ fun Login(navController: NavController, viewModel: LoginVM) {
             }
         }
 
+
         Box(modifier = Modifier.constrainAs(registerButton) {
             top.linkTo(loginButton.bottom, margin = 30.dp)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }) {
             Button(
-                onClick = {
-                    navController.navigate(route = ScreenNav.pantallaregistro.route)
-                },
+                onClick = { navController.navigate(ScreenNav.pantallaregistro.route) },
                 colors = ButtonDefaults.buttonColors(containerColor = primaryLight),
-                modifier = Modifier
-                    .width(330.dp)
-                    .height(55.dp)
+                modifier = Modifier.width(330.dp).height(55.dp)
             ) {
                 Text(
                     "Registrarse",
                     color = inverseSurfaceLightMediumContrast,
                     fontFamily = FontFamily.Serif,
-                    letterSpacing = 1.2.sp,
+                    letterSpacing = 1.sp,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.W500,
                     textDecoration = TextDecoration.Underline,

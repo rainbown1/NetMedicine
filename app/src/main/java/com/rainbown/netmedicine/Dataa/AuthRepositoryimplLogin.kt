@@ -38,6 +38,7 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
 
                         val user = UserEntity(
                             id = usuarioJson.getInt("id_usuario"),
+                            idPaciente = usuarioJson.getInt("id_paciente"),
                             nombre = usuarioJson.getString("nombre"),
                             apellido = "",
                             correo = usuarioJson.getString("correo"),

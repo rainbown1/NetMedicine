@@ -14,7 +14,7 @@ import java.util.Locale
 class TareaRepositoryImpl(private val context: Context) : AgendRepository {
 
     override fun obtenerTareas(
-        correo: String,
+        idUsuario: Int,
         onSuccess: (List<Tarea>) -> Unit,
         onError: (String) -> Unit
     ) {
@@ -31,29 +31,28 @@ class TareaRepositoryImpl(private val context: Context) : AgendRepository {
                     for (i in 0 until jsonArray.length()) {
                         val obj = jsonArray.getJSONObject(i)
 
-                        val tipoTexto = obj.getString("Tipo").uppercase()
-                        val tipoEnum = when (tipoTexto) {
+                        val tipoEnum = when (obj.getString("tipo").uppercase()) {
                             "EXAMEN" -> TipoTarea.EXAMEN
                             "CONSULTA" -> TipoTarea.CONSULTA
                             "MEDICAMENTO" -> TipoTarea.MEDICAMENTO
                             else -> TipoTarea.RECORDATORIO
                         }
 
-                        val fechaOriginal = obj.getString("Fecha")
+                        val fechaOriginal = obj.getString("fecha")
                         val fechaFormateada = try {
-                            val parser = SimpleDateFormat("yyyy-MM-dd", Locale("es", "ES"))
+                            val parser = SimpleDateFormat("yyyy-MM-dd", Locale("es"))
                             val date = parser.parse(fechaOriginal)
-                            SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES")).format(date!!)
+                            SimpleDateFormat("dd/MM/yyyy", Locale("es")).format(date!!)
                         } catch (e: Exception) {
                             fechaOriginal
                         }
 
                         tareas.add(
                             Tarea(
-                                idAgenda = obj.getInt("idAgenda"),
-                                Correo = obj.getString("Correo"),
-                                Titulo = obj.getString("Titulo"),
-                                Descripcion = obj.getString("Descripcion"),
+                                idAgenda = obj.getInt("id_agenda"),
+                                Correo = "", // ← tu API no lo devuelve
+                                Titulo = obj.getString("titulo"),
+                                Descripcion = obj.getString("descripcion"),
                                 Fecha = fechaFormateada,
                                 tipo = tipoEnum,
                                 completada = true
@@ -61,7 +60,6 @@ class TareaRepositoryImpl(private val context: Context) : AgendRepository {
                         )
                     }
 
-                    println("Tareas recibidas: ${tareas.size}")
                     onSuccess(tareas)
 
                 } catch (e: Exception) {
@@ -73,13 +71,10 @@ class TareaRepositoryImpl(private val context: Context) : AgendRepository {
             }
         ) {
             override fun getParams(): MutableMap<String, String> {
-                val params = HashMap<String, String>()
-                params["correo"] = correo
-                println("Enviando correo al servidor: $correo")
-                return params
+                return hashMapOf("id_usuario" to idUsuario.toString())
             }
         }
 
         queue.add(request)
     }
-}
+    }

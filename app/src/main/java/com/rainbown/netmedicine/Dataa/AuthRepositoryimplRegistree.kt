@@ -19,6 +19,7 @@ import kotlin.coroutines.resumeWithException
 class AuthRepositoryimplRegistree(private val context: Context) : RegistreRepository {
 
     override suspend fun registre(
+
         nombre: String,
         apellido: String,
         correo: String,
