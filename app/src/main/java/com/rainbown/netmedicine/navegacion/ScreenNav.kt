@@ -9,8 +9,7 @@ sealed class ScreenNav(val route: String) {
  object pantallahospitales: ScreenNav("pantalla_hospitales")
  object pantallaagenda: ScreenNav("pantalla_agenda")
  object pantallarecetas: ScreenNav("pantalla_recetas")
- object PantallaMedicosPorHospital: ScreenNav("pantalla_medicos")
  object pantallaperfil: ScreenNav("pantalla_perfil")
  object pantallacamara: ScreenNav("pantalla-camara")
- object pantallaeditarperfil: ScreenNav("pantalla-editar-perfil")
+
 }

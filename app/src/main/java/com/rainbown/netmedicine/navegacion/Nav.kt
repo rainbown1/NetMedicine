@@ -15,7 +15,6 @@ import com.rainbown.netmedicine.View.pantallaagendas
 import com.rainbown.netmedicine.View.pantallahospitales
 import com.rainbown.netmedicine.View.pantallainicial
 import com.rainbown.netmedicine.View.pantallalogin
-import com.rainbown.netmedicine.View.pantallaeditarperfil
 import com.rainbown.netmedicine.View.pantallaperfil
 import com.rainbown.netmedicine.View.pantallaprincipal
 import com.rainbown.netmedicine.View.pantallarecetas
@@ -72,9 +71,7 @@ fun Nav() {
             val servicioId = backStackEntry.arguments?.getString("servicioId")
             pantallaServiciosInfo(navController,servicioId)
         }
-        composable(route = ScreenNav.pantallaeditarperfil.route) {
-            pantallaeditarperfil(navController)
-        }
+
     }
 }
 

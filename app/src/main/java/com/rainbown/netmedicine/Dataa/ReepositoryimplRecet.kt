@@ -19,7 +19,7 @@ class ReepositoryimplRecet(private val context: Context) : RecetRepository {
     override suspend fun obtenerRecetas(idPaciente: Int): List<RecetEntity> =
     suspendCancellableCoroutine { continuation ->
 
-            val url = "http://192.168.1.11/Api_NetMedicine/Receta.php"
+            val url = "http://172.16.100.122/Api_NetMedicine/Receta.php"
             val queue = Volley.newRequestQueue(context)
 
             val request = object : StringRequest(

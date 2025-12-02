@@ -14,7 +14,7 @@ class UserRepository(private val context: Context) {
     suspend fun fetchUserByEmail(correo: String): UserEntity? =
         suspendCancellableCoroutine { continuation ->
 
-            val url = "http://192.168.1.11/Api_NetMedicine/GetUsuario.php"
+            val url = "http://172.16.100.122/Api_NetMedicine/GetUsuario.php"
             val queue = Volley.newRequestQueue(context)
 
             val request = object : StringRequest(
