@@ -1,5 +1,4 @@
-import com.rainbown.netmedicine.Domainn.entity.RecetEntity
 
 interface RecetRepository {
-    suspend fun obtenerRecetas(correo: String): List<RecetEntity>
+    suspend fun obtenerRecetas(idPaciente: Int): List<RecetEntity>
 }

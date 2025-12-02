@@ -1,11 +1,12 @@
 package com.rainbown.netmedicine.Dataa
 
+import RecetEntity
 import RecetRepository
 import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.rainbown.netmedicine.Domainn.entity.RecetEntity
+
 import com.rainbown.netmedicine.domain.entity.UserEntity
 import com.rainbown.netmedicine.domain.repository.AuthRepository
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -15,8 +16,8 @@ import kotlin.coroutines.resumeWithException
 
 class ReepositoryimplRecet(private val context: Context) : RecetRepository {
 
-    override suspend fun obtenerRecetas(correo: String): List<RecetEntity> =
-        suspendCancellableCoroutine { continuation ->
+    override suspend fun obtenerRecetas(idPaciente: Int): List<RecetEntity> =
+    suspendCancellableCoroutine { continuation ->
 
             val url = "http://192.168.1.11/Api_NetMedicine/Receta.php"
             val queue = Volley.newRequestQueue(context)
@@ -34,7 +35,7 @@ class ReepositoryimplRecet(private val context: Context) : RecetRepository {
                             return@StringRequest
                         }
 
-                        val listaJson = json.getJSONArray("recetas")
+                        val listaJson = json.getJSONArray("data")
                         val recetas = mutableListOf<RecetEntity>()
 
                         for (i in 0 until listaJson.length()) {
@@ -42,12 +43,15 @@ class ReepositoryimplRecet(private val context: Context) : RecetRepository {
 
                             recetas.add(
                                 RecetEntity(
-                                    idReceta = obj.getInt("idReceta"),
-                                    correo = obj.getString("correo"),
+                                    idReceta = obj.getInt("id_receta"),
+
+                                    fecha = obj.getString("fecha_prescripcion"),
+
                                     medicamento = obj.getString("medicamento"),
                                     cantidad = obj.getString("cantidad"),
-                                    admin = obj.getString("admi"),
-                                    periodo = obj.getString("periodo")
+                                    frecuencia = obj.getString("frecuencia"),
+                                    duracion = obj.getString("duracion"),
+                                    instruccion = obj.getString("instruccion")
                                 )
                             )
                         }
@@ -64,10 +68,12 @@ class ReepositoryimplRecet(private val context: Context) : RecetRepository {
             ) {
                 override fun getParams(): MutableMap<String, String> {
                     val params = HashMap<String, String>()
-                    params["correo"] = correo
-                    println("Enviando correo al servidor: $correo")
+                    params["id_paciente"] = idPaciente.toString()
+                    println("Enviando ID paciente: $idPaciente")
                     return params
                 }
+
+
             }
 
             queue.add(request)

@@ -2,7 +2,8 @@ package com.rainbown.netmedicine.domain.entity
 
 
 data class UserEntity(
-    val id: Int? = null,
+    val id: Int ,
+    val idPaciente: Int=0,
     val nombre: String,
     val apellido: String,
     val correo: String,

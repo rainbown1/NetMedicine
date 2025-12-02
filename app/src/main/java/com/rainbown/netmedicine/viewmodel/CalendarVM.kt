@@ -25,10 +25,10 @@ class CalendarViewModel(private val context: Context) : ViewModel() {
     val selectedDate: StateFlow<Long?> = _selectedDate
 
 
-    fun loadTareas(correo: String) {
+    fun loadTareas(idUsuario: Int) {
         viewModelScope.launch {
             repository.obtenerTareas(
-                correo = correo,
+                idUsuario = idUsuario,
                 onSuccess = { lista ->
                     _tareas.value = lista
                     _tareasFiltradas.value = lista
@@ -39,6 +39,7 @@ class CalendarViewModel(private val context: Context) : ViewModel() {
             )
         }
     }
+
 
 
     fun updateSelectedDate(dateMillis: Long) {

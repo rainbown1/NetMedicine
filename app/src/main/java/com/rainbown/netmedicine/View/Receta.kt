@@ -1,6 +1,7 @@
 package com.rainbown.netmedicine.View
 
 import ObtenerRecetasUseCase
+import RecetEntity
 import RecetaVM
 import RecetaVMFactory
 import android.content.Context
@@ -29,7 +30,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.rainbown.netmedicine.Dataa.ReepositoryimplRecet
-import com.rainbown.netmedicine.Domainn.entity.RecetEntity
+
 import com.rainbown.netmedicine.View.Components.MyNavigationBar
 import com.rainbown.netmedicine.View.Components.barra
 
@@ -56,14 +57,11 @@ fun pantallarecetas(
 
     LaunchedEffect(Unit) {
         val sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val correoUsuario = sharedPref.getString("correo", null)
+        val idPaciente = sharedPref.getInt("id_paciente",-1)
+        println("ID obtenido de prefs: $idPaciente")
+        viewModel.cargarRecetas(idPaciente)
 
-        if (correoUsuario != null) {
-            println("Cargando tareas para $correoUsuario")
-            viewModel.cargarRecetas(correoUsuario)
-        } else {
-            println("No se encontró correo guardado")
-        }
+
     }
 
 
@@ -160,8 +158,8 @@ fun RecetaScreen(
 @Composable
 fun RecetaCard(receta: RecetEntity) {
     Card(
-        onClick = { },
-        modifier = Modifier.height(160.dp),
+        onClick = {},
+        modifier = Modifier.height(190.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -169,41 +167,55 @@ fun RecetaCard(receta: RecetEntity) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
+                .padding(12.dp),
             verticalArrangement = Arrangement.Center
         ) {
 
+            // Medicamento
             Text(
                 text = receta.medicamento,
-                fontSize = 14.sp,
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 6.dp)
             )
 
+            // Fecha
+            Text(
+                text = "Fecha: ${receta.fecha}",
+                fontSize = 11.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            // Cantidad y Frecuencia
             Row {
                 Text(
                     text = "Cantidad: ${receta.cantidad}",
                     fontSize = 12.sp,
-                    fontFamily = FontFamily.Serif,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = 10.dp)
                 )
 
                 Text(
-                    text = "Vía: ${receta.admin}",
-                    fontSize = 12.sp,
-                    fontFamily = FontFamily.Serif
+                    text = "Frecuencia: ${receta.frecuencia}",
+                    fontSize = 12.sp
                 )
             }
 
+            // Duración
             Text(
-                text = "Periodo: ${receta.periodo}",
+                text = "Duración: ${receta.duracion}",
                 fontSize = 12.sp,
-                fontFamily = FontFamily.Serif,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            // Instrucciones
+            Text(
+                text = "Indicaciones: ${receta.instruccion}",
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 6.dp)
             )
         }
     }
 }
+

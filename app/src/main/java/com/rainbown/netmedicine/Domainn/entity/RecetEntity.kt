@@ -1,11 +1,9 @@
-package com.rainbown.netmedicine.Domainn.entity
-
 data class RecetEntity(
     val idReceta: Int,
-    val correo: String,
+    val fecha: String,
     val medicamento: String,
     val cantidad: String,
-    val admin: String,
-    val periodo: String
-
+    val frecuencia: String,
+    val duracion: String,
+    val instruccion: String
 )

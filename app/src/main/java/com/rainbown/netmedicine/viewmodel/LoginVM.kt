@@ -1,6 +1,5 @@
 package com.rainbown.netmedicine.viewmodel
 
-
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,7 +33,7 @@ class LoginVM(
                 val user = loginUseCase(correo, pass)
 
                 if (user != null) {
-                    guardarCorreoLocal(correo)
+                    guardarDatosLocal(user)
                     usuarioLiveData.postValue(user)
                 }
 
@@ -45,10 +44,18 @@ class LoginVM(
         }
     }
 
-    private fun guardarCorreoLocal(correo: String) {
+    private fun guardarDatosLocal(user: UserEntity) {
+
         val prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        prefs.edit().putString("correo", correo).apply()
-        println("Correo guardado localmente: $correo")
+
+        prefs.edit()
+            .putInt("id_usuario", user.id)
+            .putInt("id_paciente", user.idPaciente)
+            .putString("correo", user.correo)
+            .putString("nombre", user.nombre)
+            .apply()
+
+        println("LOGIN OK → id_usuario=${user.id}, id_paciente=${user.idPaciente}")
     }
 
     fun clearError() {

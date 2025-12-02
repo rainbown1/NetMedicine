@@ -1,30 +1,40 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rainbown.netmedicine.Domainn.entity.RecetEntity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class RecetaVM(private val obtenerRecetasUseCase: ObtenerRecetasUseCase) : ViewModel() {
+class RecetaVM(
+    private val obtenerRecetasUseCase: ObtenerRecetasUseCase
+) : ViewModel() {
 
     private val _recetas = MutableStateFlow<List<RecetEntity>>(emptyList())
-    val recetas = _recetas
+    val recetas: StateFlow<List<RecetEntity>> = _recetas
 
     private val _loading = MutableStateFlow(false)
-    val loading = _loading
+    val loading: StateFlow<Boolean> = _loading
 
     private val _error = MutableStateFlow<String?>(null)
-    val error = _error
+    val error: StateFlow<String?> = _error
 
-    fun cargarRecetas(correo: String) {
+
+    fun cargarRecetas(idPaciente: Int) {
         viewModelScope.launch {
+
             _loading.value = true
+            _error.value = null
+
             try {
-                val lista = obtenerRecetasUseCase(correo)
-                _recetas.value = lista
-                _error.value = null
+                val recetasObtenidas = obtenerRecetasUseCase(idPaciente)
+
+                _recetas.value = recetasObtenidas
+
             } catch (e: Exception) {
-                _error.value = e.localizedMessage
+
+                _error.value = e.localizedMessage ?: "Error al cargar recetas"
+
             } finally {
+
                 _loading.value = false
             }
         }
