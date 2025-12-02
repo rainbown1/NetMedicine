@@ -29,7 +29,7 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
         altura:String
     ): UserEntity? = suspendCancellableCoroutine { continuation ->
 
-        val url = "http://192.168.1.13/Api_NetMedicine/registro.php"
+        val url = "http://192.168.1.11/Api_NetMedicine/registro.php"
         val queue = Volley.newRequestQueue(context)
 
         val stringRequest = object : StringRequest(
@@ -40,7 +40,7 @@ class AuthRepositoryimplRegistree(private val context: Context) : RegistreReposi
                     val success = jsonResponse.optBoolean("success", false)
 
                     if (success) {
-                        val id = jsonResponse.optInt("id", 0)
+                        val id = jsonResponse.optInt("id_usuario", 0)
 
                         val user = UserEntity(
                             id = id,

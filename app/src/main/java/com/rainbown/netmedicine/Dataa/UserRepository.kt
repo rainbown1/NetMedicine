@@ -1,7 +1,6 @@
 package com.rainbown.netmedicine.Dataa
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.rainbown.netmedicine.domain.entity.UserEntity
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -15,7 +14,7 @@ class UserRepository(private val context: Context) {
     suspend fun fetchUserByEmail(correo: String): UserEntity? =
         suspendCancellableCoroutine { continuation ->
 
-            val url = "http://192.168.1.13/Api_NetMedicine/GetUsuario.php"
+            val url = "http://192.168.1.11/Api_NetMedicine/GetUsuario.php"
             val queue = Volley.newRequestQueue(context)
 
             val request = object : StringRequest(
@@ -25,18 +24,20 @@ class UserRepository(private val context: Context) {
                         val json = JSONObject(response)
 
                         if (json.getBoolean("success")) {
-                            val u = json.getJSONObject("user")
+
+
+                            val u = json.getJSONObject("usuario")
 
                             val user = UserEntity(
-                                id = u.getInt("idUsuario"),
-                                nombre = u.getString("Nombre"),
-                                apellido = u.getString("Apellido"),
-                                correo = u.getString("Correo"),
-                                telefono = u.getString("Telefono"),
-                                contraseña = u.getString("Contraseña"),
-                                genero = u.getString("genero"),
-                                peso = u.getString("peso"),
-                                altura = u.getString("altura")
+                                id = u.getInt("id_usuario"),
+                                nombre = u.getString("nombre"),
+                                apellido = "",
+                                correo = u.getString("correo"),
+                                telefono = u.getString("telefono"),
+                                contraseña = "",
+                                genero = u.optString("genero", ""),
+                                peso = u.optString("peso", ""),
+                                altura = u.optString("altura", "")
                             )
 
                             continuation.resume(user)

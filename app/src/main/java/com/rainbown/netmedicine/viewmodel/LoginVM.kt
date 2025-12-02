@@ -1,5 +1,6 @@
 package com.rainbown.netmedicine.viewmodel
 
+
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,32 +32,29 @@ class LoginVM(
         viewModelScope.launch {
             try {
                 val user = loginUseCase(correo, pass)
+
                 if (user != null) {
                     guardarCorreoLocal(correo)
                     usuarioLiveData.postValue(user)
-                    val prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-                    val correoVerificado = prefs.getString("correo", "No guardado")
-                    println(" Verificación inmediata -> $correoVerificado")
-
-                } else {
-                    errorLiveData.postValue("Correo o contraseña incorrectos")
                 }
+
             } catch (e: Exception) {
-                errorLiveData.postValue("Error: ${e.message}")
+                val message = e.message ?: "Ocurrió un error inesperado"
+                errorLiveData.postValue(message)
             }
         }
     }
 
     private fun guardarCorreoLocal(correo: String) {
         val prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        prefs.edit().putString("correo", email.value ?: "").apply()
-        println("Correo guardado localmente: ${email.value}")
-
+        prefs.edit().putString("correo", correo).apply()
+        println("Correo guardado localmente: $correo")
     }
 
     fun clearError() {
         errorLiveData.value = null
     }
+
     class LoginVMFactory(
         private val loginUseCase: LoginUsecase,
         private val context: Context
@@ -69,5 +67,4 @@ class LoginVM(
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-
 }

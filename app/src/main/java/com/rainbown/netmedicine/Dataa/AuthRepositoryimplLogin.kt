@@ -16,43 +16,46 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
     override suspend fun login(correo: String, contraseña: String): UserEntity? =
         suspendCancellableCoroutine { continuation ->
 
-            val url = "http://192.168.1.13/Api_NetMedicine/login.php"
+            val url = "http://192.168.1.11/Api_NetMedicine/login.php"
             val queue = Volley.newRequestQueue(context)
 
             val request = object : StringRequest(
                 Request.Method.POST, url,
-                { response ->
+                StringRequest@{ response ->
                     try {
                         val json = JSONObject(response)
 
-                        if (json.optBoolean("success") && json.has("usuario")) {
+                        val success = json.optBoolean("success")
+                        val message = json.optString("message")
 
-                            val usuarioJson = json.getJSONObject("usuario")
 
-                            val user = UserEntity(
-                                id = usuarioJson.getInt("idUsuario"),
-                                nombre = usuarioJson.getString("Nombre"),
-                                apellido = usuarioJson.getString("Apellido"),
-                                correo = usuarioJson.getString("Correo"),
-                                telefono = usuarioJson.getString("Telefono"),
-                                contraseña = usuarioJson.getString("Contraseña"),
-                                genero = usuarioJson.getString("genero"),
-                                peso = usuarioJson.getString("peso"),
-                                altura = usuarioJson.getString("altura")
-
-                            )
-
-                            continuation.resume(user)
-                        } else {
-                            continuation.resume(null)
+                        if (!success) {
+                            continuation.resumeWithException(Exception(message))
+                            return@StringRequest
                         }
+
+                        val usuarioJson = json.getJSONObject("usuario")
+
+                        val user = UserEntity(
+                            id = usuarioJson.getInt("id_usuario"),
+                            nombre = usuarioJson.getString("nombre"),
+                            apellido = "",
+                            correo = usuarioJson.getString("correo"),
+                            telefono = usuarioJson.getString("telefono"),
+                            contraseña = usuarioJson.getString("password"),
+                            genero = "",
+                            peso = "",
+                            altura = ""
+                        )
+
+                        continuation.resume(user)
 
                     } catch (e: Exception) {
                         continuation.resumeWithException(e)
                     }
                 },
                 { error ->
-                    continuation.resumeWithException(error)
+                    continuation.resumeWithException(Exception("Error de conexión al servidor"))
                 }
             ) {
                 override fun getParams(): MutableMap<String, String> =
@@ -64,5 +67,4 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
 
             queue.add(request)
         }
-
 }
